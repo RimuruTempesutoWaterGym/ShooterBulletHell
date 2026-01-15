@@ -228,3 +228,4 @@ void displayFrameRate(sfRenderWindow* _window, sfText* _text);
 //	Fonction screenshot
 //-----------------------------------------------------------
 void screenshot(sfRenderWindow* _window);
+float Clamp(float x);

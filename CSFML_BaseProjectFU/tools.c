@@ -185,6 +185,21 @@ float FrameRate()
 {
 	return 1.0f / getDeltaTime();
 }
+float Clamp(float x)
+{
+	if (x < 1.f && x > -1.f)
+	{
+		if (x < 0.f) 
+		{
+			return -1.0f;
+		}
+		else
+		{
+			return 1.0f;
+		}
+	}
+
+}
 
 // Display the frame rate per second
 void displayFrameRate(sfRenderWindow* _window, sfText* _text)
