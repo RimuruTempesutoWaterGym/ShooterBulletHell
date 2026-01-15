@@ -1,0 +1,22 @@
+[all]
+animation loadingAnim ../Ressources/Textures/loading.anim
+soundfx buttonClick ../Ressources/SoundsFX/button_click.ogg
+font zelda ../Ressources/Fonts/The_Wild_Breath_of_Zelda.otf
+[end]
+[menu]
+single menu ../Ressources/Textures/Menu.png
+music spatial ../Ressources/Musics/spatial_theme.ogg
+font big ../Ressources/Fonts/full_Pack_2025.ttf
+[end]
+[game]
+single BG2 ../Ressources/Textures/BG2.png
+single BG1 ../Ressources/Textures/BG1.png
+single player ../Ressources/Textures/patchuli.png
+single enemy ../Ressources/Textures/enemyGreen1.png
+single enemy2 ../Ressources/Textures/enemyRed3.png
+single boss ../Ressources/Textures/ufoRed.png
+single tir ../Ressources/Textures/tir.png
+single tirEnemy ../Ressources/Textures/TirEnemy.png
+animation explosionAnim ../Ressources/Textures/explosion.anim
+music bismarck ../Ressources/Musics/Bismarck.ogg
+[end]
