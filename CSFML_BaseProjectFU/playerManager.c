@@ -25,8 +25,8 @@ void preparePlayer(sfRenderWindow* _window)
 	tempPlayer->scale = 1;
 	tempPlayer->pos.y = 900;
 	tempPlayer->pos.x = 900;
-	tempPlayer->velocity.y = 100;
-	tempPlayer->velocity.x = 100;
+	tempPlayer->velocity.y = 300;
+	tempPlayer->velocity.x = 300;
 	ajoutPlayer(tempPlayer);
 }
 // ajoute un element de la liste des joueurs
@@ -70,7 +70,7 @@ void updatePlayer(sfRenderWindow* _window, sfSprite* _sprite)
 
 	while (tempPlayer != NULL)
 	{
-		if (sfKeyboard_isKeyPressed(sfKeySpace) && timerBall > 0.5f)
+		if (sfKeyboard_isKeyPressed(sfKeySpace) && timerBall > 0.05f)
 		{
 			preparePlayerShot(_window, &tempPlayer->pos);
 			timerBall = 0.f;

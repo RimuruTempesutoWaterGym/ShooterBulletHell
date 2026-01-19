@@ -5,7 +5,7 @@
 #include "tools.h"
 
 // derniere element de la liste des ennemies
-
+int ennemyNumber = 0;
 
 
 // cr�� un �l�ment de la liste des ennemies
@@ -20,6 +20,7 @@ void initEnnemy()
 // cree un element de la liste des ennemies
 void prepareEnnemy(sfRenderWindow* _window)
 {
+	ennemyNumber++;
 	ennemy* tempEnnemy= (ennemy*)calloc(1, sizeof(ennemy));
 	tempEnnemy->life = 1;
 	tempEnnemy->scale = 1;
@@ -62,7 +63,23 @@ ennemy* retireEnnemy(ennemy* _ennemy)
 	}
 
 }
+int getEnnemyNumber()
+{
 
+	return ennemyNumber;
+
+}
+int isActualEnnemyAlive()
+{
+
+	ennemy* tempEnnemy = dlEnnemies;
+	if (tempEnnemy != NULL)
+	{
+		return 1;
+	}
+	return 0;
+
+}
 //affiche toutes les particules des groupe des ennemies
 void updateEnnemy(sfRenderWindow* _window, sfSprite* _sprite)
 {
@@ -76,14 +93,7 @@ void updateEnnemy(sfRenderWindow* _window, sfSprite* _sprite)
 		prepareEnnemyShot(_window, &tempEnnemy->pos, rand_int(20,200));
 		tempEnnemy->cooldown = 0.f;
 	}
-	if (tempEnnemy->life < 1 || tempEnnemy->pos.y > 1000)
-	{
-		if (tempEnnemy->life == 0)
-		{
-			prepareParticleGroup(_window, 50, (sfVector2f) { tempEnnemy->pos.x + 47, tempEnnemy->pos.y + 42 }, 40, 40);
-		}
-		tempEnnemy = retireEnnemy(tempEnnemy);
-	}
+
 	else
 	{
 		sfSprite_setPosition(_sprite, tempEnnemy->pos);

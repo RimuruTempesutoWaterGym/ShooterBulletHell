@@ -20,6 +20,7 @@ sfSprite* spBG2;
 sfSprite* spEnnemy;
 sfSprite* spPlayer;
 sfCircleShape* spShot;
+sfCircleShape* spParticle;
 
 
 
@@ -27,6 +28,7 @@ sfBool gamepadChangePos;
 sfVector2f BG1Pos;
 sfVector2f BG2Pos;
 float ennemyTimer;
+float startTimer;
 
 
 float timer;
@@ -55,6 +57,7 @@ void initGame(Window* _window)
 	spEnnemy = sfSprite_create();
 	spPlayer = sfSprite_create();
 	spShot = sfCircleShape_create();
+	spParticle = sfCircleShape_create();
 	
 	sfSprite_setTexture(spBG1, GetTexture("BG1"), sfTrue);
 	sfSprite_setTexture(spBG2, GetTexture("BG2"), sfTrue);
@@ -82,12 +85,26 @@ void initGame(Window* _window)
 void updateGame(Window* _window)
 {
 		timer += getDeltaTime();
+		if(getEnnemyNumber() == 0)
+		{
+			startTimer += getDeltaTime();
+			if (startTimer > 1.f)
+			{
+				prepareEnnemy(_window->renderWindow);
+			}
+		}
+		if (getEnnemyNumber() > 0 && isActualEnnemyAlive() == 0)
+		{
+			printf("%f", ennemyTimer);
+			ennemyTimer += getDeltaTime();
+		}
 		ennemyTimer += getDeltaTime();
 		
-		if(ennemyTimer > 0.6f)
+		if (isActualEnnemyAlive() == 0 && ennemyTimer > getEnnemyNumber() * 4.f)
 		{
+	
 			prepareEnnemy(_window->renderWindow);
-			ennemyTimer = 0.0f;
+	
 		}
 	
 		for (int i = 0; i < 8; i++)
@@ -115,13 +132,6 @@ void updateGame(Window* _window)
 		{
 			if (isConnected(i))
 			{
-				float a = 0;
-				float b = 0;
-				getTriggers(i, &a, &b);
-					
-			
-			
-
 					timer = 0.0f;
 			
 			}
@@ -150,7 +160,7 @@ void displayGame(Window* _window)
 	updateEnnemy(_window->renderWindow, spEnnemy);
 	updatePlayer(_window->renderWindow, spPlayer);
 	updateShot(_window->renderWindow, spShot);
-	updateParticle(_window->renderWindow, spShot);
+	updateParticle(_window->renderWindow, spParticle);
 }
 
 void deinitGame()
