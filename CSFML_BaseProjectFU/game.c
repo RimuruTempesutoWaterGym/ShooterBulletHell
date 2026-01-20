@@ -21,6 +21,7 @@ sfSprite* spEnnemy;
 sfSprite* spPlayer;
 sfCircleShape* spShot;
 sfCircleShape* spParticle;
+sfCircleShape* spHitboxPlayer;
 
 
 
@@ -58,6 +59,7 @@ void initGame(Window* _window)
 	spPlayer = sfSprite_create();
 	spShot = sfCircleShape_create();
 	spParticle = sfCircleShape_create();
+	spHitboxPlayer = sfCircleShape_create();
 	
 	sfSprite_setTexture(spBG1, GetTexture("BG1"), sfTrue);
 	sfSprite_setTexture(spBG2, GetTexture("BG2"), sfTrue);
@@ -95,10 +97,9 @@ void updateGame(Window* _window)
 		}
 		if (getEnnemyNumber() > 0 && isActualEnnemyAlive() == 0)
 		{
-			printf("%f", ennemyTimer);
 			ennemyTimer += getDeltaTime();
 		}
-		ennemyTimer += getDeltaTime();
+
 		
 		if (isActualEnnemyAlive() == 0 && ennemyTimer > getEnnemyNumber() * 4.f)
 		{
@@ -115,13 +116,6 @@ void updateGame(Window* _window)
 				timer = 0.0f;
 			}
 		}
-	
-	
-		
-	
-		
-
-		
 		if (sfKeyboard_isKeyPressed(sfKeyEscape) == sfTrue && timer > 0.2f)
 		{
 			togglePause();
@@ -158,11 +152,11 @@ void displayGame(Window* _window)
 	
 	sfRenderWindow_drawSprite(_window->renderWindow, spBG2, NULL); 
 	updateEnnemy(_window->renderWindow, spEnnemy);
-	updatePlayer(_window->renderWindow, spPlayer);
+	updatePlayer(_window->renderWindow, spPlayer, spHitboxPlayer);
 	updateShot(_window->renderWindow, spShot);
 	updateParticle(_window->renderWindow, spParticle);
 }
-
+	
 void deinitGame()
 {
 	deinitPause();
@@ -172,6 +166,8 @@ void deinitGame()
 	sfSprite_destroy(spEnnemy);
 	sfSprite_destroy(spPlayer);
 	sfCircleShape_destroy(spShot);
+	sfCircleShape_destroy(spParticle);
+	sfCircleShape_destroy(spHitboxPlayer);
 	RemoveAllTextureButALL();
 	RemoveAllSoundButALL();
 }

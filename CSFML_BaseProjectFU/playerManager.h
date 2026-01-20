@@ -13,7 +13,7 @@ struct player
 
 void preparePlayer(sfRenderWindow* _window);
 void ajoutPlayer(player* _player);
-void updatePlayer(sfRenderWindow* _window, sfCircleShape* _circle);
+void updatePlayer(sfRenderWindow* _window, sfSprite* _sprite, sfCircleShape* _hitPoint);
 player* retirePlayer(player* _player);
 void initPlayer();
 void MovementPlayer(player* _player);

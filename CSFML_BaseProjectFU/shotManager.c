@@ -254,7 +254,7 @@ void updateShot(sfRenderWindow* _window, sfCircleShape* _shot, sfSprite* _ennemi
 					tempShot->life--;
 					tempEnnemy->life--;
 				}
-				if (tempEnnemy->life < 1 || tempEnnemy->pos.y > 1000)
+				if (tempEnnemy->life < 1 )
 				{
 
 					prepareParticleGroup(_window, 50, (sfVector2f) { tempEnnemy->pos.x + 47, tempEnnemy->pos.y + 42 }, 40, 40);

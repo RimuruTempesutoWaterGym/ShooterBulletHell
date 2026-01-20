@@ -25,10 +25,10 @@ void prepareEnnemy(sfRenderWindow* _window)
 	tempEnnemy->life = 1;
 	tempEnnemy->scale = 1;
 	tempEnnemy->cooldown = 0;
-	tempEnnemy->pos.y = 0;
-	tempEnnemy->pos.x = rand_int(300, 1500);
-	tempEnnemy->velocity.y = 30;
-	tempEnnemy->velocity.x = 0;
+	tempEnnemy->pos.y = 100;
+	tempEnnemy->pos.x = -100;
+	tempEnnemy->velocity.y = 0;
+	tempEnnemy->velocity.x = 200;
 	ajoutEnnemy(tempEnnemy);
 }
 // ajoute un element de la liste des ennemies
@@ -93,7 +93,10 @@ void updateEnnemy(sfRenderWindow* _window, sfSprite* _sprite)
 		prepareEnnemyShot(_window, &tempEnnemy->pos, rand_int(20,200));
 		tempEnnemy->cooldown = 0.f;
 	}
-
+	if (tempEnnemy->pos.x >= 2100 || tempEnnemy->pos.y > 1200 || tempEnnemy->pos.y < -200 || tempEnnemy->pos.x < -200)
+	{
+		tempEnnemy = retireEnnemy(tempEnnemy);
+	}
 	else
 	{
 		sfSprite_setPosition(_sprite, tempEnnemy->pos);

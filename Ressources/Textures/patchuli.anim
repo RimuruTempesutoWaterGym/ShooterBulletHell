@@ -1,0 +1,7 @@
+[path]
+../Ressources/Textures/patchuli.png
+[end]
+// Sprite Name | left | top | width | height | Frame | TimeAnim | row
+[config]
+patchuli	0	0	50	50	4	0.3		0
+[end]

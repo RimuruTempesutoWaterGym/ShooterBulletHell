@@ -11,7 +11,7 @@ font big ../Ressources/Fonts/full_Pack_2025.ttf
 [game]
 single BG2 ../Ressources/Textures/BG2.png
 single BG1 ../Ressources/Textures/BG1.png
-single player ../Ressources/Textures/patchuli.png
+animation patchuliAnim ../Ressources/Textures/patchuli.anim
 single enemy ../Ressources/Textures/enemyGreen1.png
 single enemy2 ../Ressources/Textures/enemyRed3.png
 single boss ../Ressources/Textures/ufoRed.png
