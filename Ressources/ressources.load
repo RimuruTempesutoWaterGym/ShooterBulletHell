@@ -9,8 +9,6 @@ music spatial ../Ressources/Musics/spatial_theme.ogg
 font big ../Ressources/Fonts/full_Pack_2025.ttf
 [end]
 [game]
-single BG2 ../Ressources/Textures/Backgrounds/newPaperFun2.png
-single BG1 ../Ressources/Textures/Backgrounds/newPaperFun.png
 animation patchuliAnim ../Ressources/Textures/patchuli.anim
 single enemy ../Ressources/Textures/enemyGreen1.png
 single enemy2 ../Ressources/Textures/enemyRed3.png
