@@ -53,6 +53,9 @@ void initGame(Window* _window)
 	Sound_Onload(GAME);
 	Play_Music(GAME);
 
+	initPlayer();
+	initParticle();
+
 	spBG1 = sfSprite_create();
 	spBG2 = sfSprite_create();
 	spEnnemy = sfSprite_create();
@@ -143,7 +146,9 @@ void updateGame(Window* _window)
 
 		sfSprite_setPosition(spBG1, BG1Pos);
 		sfSprite_setPosition(spBG2, BG2Pos);
-	
+		
+		sfSprite_setColor(spBG1, sfRed);
+		sfSprite_setColor(spBG2, sfBlue);
 }
 
 void displayGame(Window* _window)

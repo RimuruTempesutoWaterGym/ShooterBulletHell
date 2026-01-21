@@ -1,15 +1,19 @@
+#include "textureManager.h"
 #include "particleManager.h"
 #include "tools.h"
 
 // derniere element de la liste de groupe de particules
 particleGroup* dlParticleGroup = 0;
 	float lifeTime = 0;
-// cr�� un �l�ment de la liste de groupe de particules
 
+
+// cr�� un �l�ment de la liste de groupe de particules
+	sfIntRect particlesRect;
 
 void initParticle()
 {
-
+	 particlesRect = GetRect("particles");
+	
 }
 
 // cree un element de la liste de groupe de particules
@@ -32,7 +36,8 @@ void prepareParticleGroup(sfRenderWindow * _window, int nbParticles, sfVector2f 
 void prepareParticle(sfRenderWindow* _window, particleGroup* _particleGroup,sfVector2f _pos, int _rangeY, int _rangeX)
 {
 	particle* tempParticle = (particle*)calloc(1, sizeof(particle));
-	tempParticle->color = sfBlue;
+	tempParticle->color = rand_int(0,14);
+	tempParticle->fadeValue =255;
 	tempParticle->spawnTime = rand_int(0, 2);
 	tempParticle->lifeTime = rand_int(2, 4) + tempParticle->spawnTime;
 	tempParticle->scale = rand_int(5, 15);
@@ -118,18 +123,23 @@ void updateParticle(sfRenderWindow* _window, sfCircleShape* _circle)
 
 			while (tempParticle != NULL)
 			{
-				if (tempParticleGroup->time < tempParticle->lifeTime && tempParticleGroup->time > tempParticle->spawnTime)
+				if (tempParticleGroup->time < tempParticle->lifeTime && tempParticleGroup->time > tempParticle->spawnTime)	
 				{
-					if (tempParticleGroup->time > tempParticle->lifeTime - 1 && tempParticle->color.a > 0)
+					if (tempParticleGroup->time > tempParticle->lifeTime - 1 && tempParticle->fadeValue > 0)
 					{
 
-						tempParticle->color.a -= lerp(tempParticle->color.a, 1, 6 * getDeltaTime());
+						tempParticle->fadeValue -= lerp(tempParticle->fadeValue, 1, 6 * getDeltaTime());
 
 					}
-				
+					particlesRect.left = tempParticle->color * particlesRect.width;
+			
 					sfCircleShape_setPosition(_circle, tempParticle->pos);
 					sfCircleShape_setOrigin(_circle, (sfVector2f) { (float) { tempParticle->scale }, (float) { tempParticle->scale } });
-					sfCircleShape_setFillColor(_circle, tempParticle->color);
+					sfCircleShape_setTexture(_circle, GetTexture("particles"), NULL);
+					particlesRect.left = tempParticle->color * particlesRect.width;
+					sfCircleShape_setTextureRect(_circle, particlesRect);
+
+					sfCircleShape_setFillColor(_circle, (sfColor){255,255,255, tempParticle->fadeValue});
 					sfCircleShape_setRadius(_circle, tempParticle->scale);
 					sfRenderWindow_drawCircleShape(_window, _circle, sfFalse);
 	

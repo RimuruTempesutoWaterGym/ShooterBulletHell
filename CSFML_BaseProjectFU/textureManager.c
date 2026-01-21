@@ -1,5 +1,6 @@
 #include "textureManager.h"
 Texture* textureBegin = 0;
+
 // Set config texture depending the type  
 void Texture_Onload(State _state)
 {
@@ -23,6 +24,7 @@ void Texture_Onload(State _state)
 		}
 		if (tempRessources->type == SPRITESHEET)
 		{
+		
 			if (tempRessources->state == _state)
 			{
 				FILE* file;
@@ -64,8 +66,9 @@ void Texture_Onload(State _state)
 					}
 					else if (statetex == CONFIG)
 					{
+						
 						sscanf(tmpligne, "%s %d %d %d %d", tmpname, &tmprect.left, &tmprect.top, &tmprect.width, &tmprect.height);
-
+		
 						Texture* tempTexture = (Texture*)calloc(1, sizeof(Texture));
 						strcpy(tempTexture->name, tmpname);
 						tempTexture->spSheetRec = tmprect;

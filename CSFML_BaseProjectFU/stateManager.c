@@ -9,6 +9,7 @@
 #include "options.h"
 #include "viewManager.h"
 #include "fontManager.h"
+#include "particleManager.h"
 
 // Init all resources and init other file depending the state
 void stateInit(Window* _window)
@@ -56,6 +57,7 @@ void stateInit(Window* _window)
 			sfThread_launch(loadingThread);
 			initPause(_window);
 			initOptions(_window);
+		
 		}
 		if (state == END)
 		{

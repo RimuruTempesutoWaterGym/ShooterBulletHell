@@ -9,14 +9,16 @@ music spatial ../Ressources/Musics/spatial_theme.ogg
 font big ../Ressources/Fonts/full_Pack_2025.ttf
 [end]
 [game]
-single BG2 ../Ressources/Textures/BG2.png
-single BG1 ../Ressources/Textures/BG1.png
+single BG2 ../Ressources/Textures/Backgrounds/newPaperFun2.png
+single BG1 ../Ressources/Textures/Backgrounds/newPaperFun.png
 animation patchuliAnim ../Ressources/Textures/patchuli.anim
 single enemy ../Ressources/Textures/enemyGreen1.png
 single enemy2 ../Ressources/Textures/enemyRed3.png
 single boss ../Ressources/Textures/ufoRed.png
-single tir ../Ressources/Textures/tir.png
-single tirEnemy ../Ressources/Textures/TirEnemy.png
+single shot ../Ressources/Textures/Danmaku/shot.png
+single ennemyShot ../Ressources/Textures/Danmaku/ennemyShot.png
+single hitbox ../Ressources/Textures/Danmaku/hitbox.png
+spritesheet particlesSheet ../Ressources/Textures/particles.anim
 animation explosionAnim ../Ressources/Textures/explosion.anim
 music bismarck ../Ressources/Musics/Bismarck.ogg
 [end]

@@ -269,6 +269,11 @@ void updateShot(sfRenderWindow* _window, sfCircleShape* _shot, sfSprite* _ennemi
 		}
 		if (tempShot->shooter != ally)
 		{
+			sfCircleShape_setTexture(_shot, GetTexture("ennemyShot"),NULL);
+		}
+		else
+		{
+			sfCircleShape_setTexture(_shot, GetTexture("shot"), NULL);
 		}
  		if (tempShot->life < 1 || tempShot->pos.y < 0 || tempShot->pos.y > 1100 || tempShot->pos.x < 0 || tempShot->pos.y > 2000)
 		{
@@ -276,8 +281,9 @@ void updateShot(sfRenderWindow* _window, sfCircleShape* _shot, sfSprite* _ennemi
 		}
 		else
 		{
-			sfCircleShape_setFillColor(_shot, sfBlue);
+		
 			sfCircleShape_setRadius(_shot, tempShot->scale);
+		
 	
 			tempShot->pos.y -= tempShot->velocity.y * getDeltaTime();
 			tempShot->pos.x -= tempShot->velocity.x * getDeltaTime();

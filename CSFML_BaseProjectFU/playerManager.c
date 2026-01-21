@@ -17,7 +17,7 @@ sfIntRect  patchuliRect;
 
 void initPlayer()
 {
-
+	patchuliRect = GetRect("patchuli");
 }
 
 
@@ -31,7 +31,7 @@ void preparePlayer(sfRenderWindow* _window)
 	tempPlayer->velocity.y = 300;
 	tempPlayer->velocity.x = 300;
 	ajoutPlayer(tempPlayer);
-	patchuliRect = GetRect("patchuli");
+
 }
 // ajoute un element de la liste des joueurs
 void ajoutPlayer(player* _player)
@@ -78,6 +78,7 @@ void updatePlayer(sfRenderWindow* _window, sfSprite* _sprite, sfCircleShape* _hi
 	{
 		if (sfKeyboard_isKeyPressed(sfKeySpace) && timerBall > 0.05f)
 		{
+
 			preparePlayerShot(_window, &tempPlayer->pos);
 			timerBall = 0.f;
 	}
@@ -93,9 +94,11 @@ void updatePlayer(sfRenderWindow* _window, sfSprite* _sprite, sfCircleShape* _hi
 		sfRenderWindow_drawSprite(_window, _sprite, NULL);
 		if (sfKeyboard_isKeyPressed(sfKeyC) && timerBall > 0.05f)
 		{
+
 			tempPlayer->velocity.y = 100;
 			tempPlayer->velocity.x = 100;
-			sfCircleShape_setFillColor(_hitPoint, sfRed);
+	
+			sfCircleShape_setTexture(_hitPoint, GetTexture("hitbox"), NULL);
 			sfCircleShape_setOrigin(_hitPoint, (sfVector2f) { tempPlayer->scale, tempPlayer->scale  });
 			sfCircleShape_setPosition(_hitPoint, (sfVector2f) { tempPlayer->pos.x + patchuliRect.width / 2, tempPlayer->pos.y + patchuliRect.height / 2 });
 			sfCircleShape_setRadius(_hitPoint, tempPlayer->scale);

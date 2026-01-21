@@ -6,7 +6,8 @@ typedef struct particle particle;
 struct particle
 {
 	particle* pNext;
-	sfColor color;
+	int color;
+	int fadeValue;
 	sfVector2f pos;
 	sfVector2f velocity;
 	float lifeTime;
