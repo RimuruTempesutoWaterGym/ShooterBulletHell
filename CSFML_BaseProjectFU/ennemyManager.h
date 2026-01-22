@@ -14,9 +14,10 @@ struct ennemy
 
 };
 
-ennemy* dlEnnemies ;
+
 void prepareEnnemy(sfRenderWindow* _window);
 void ajoutEnnemy(ennemy* _ennemy);
 void updateEnnemy(sfRenderWindow* _window, sfSprite* _sprite);
 ennemy* retireEnnemy(ennemy* _ennemy);
 void initEnnemy();
+ennemy* GetEnnemyList();

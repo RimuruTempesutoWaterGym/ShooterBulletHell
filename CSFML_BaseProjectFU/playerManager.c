@@ -2,14 +2,14 @@
 #include "playerManager.h"
 #include "shotManager.h"
 #include "textureManager.h"
-#include "tools.h"
 
 // derniere element de la liste des joueurs
-player* dlPlayers = 0;
+
 float timerSprite = 0;
 float timerBall = 0;
+float timerUlt = 0;
 int spriteFrame = 0;
-
+player* dlPlayers = 0;
 sfIntRect  patchuliRect;
 
 // cr�� un �l�ment de la liste des joueurs
@@ -17,6 +17,7 @@ sfIntRect  patchuliRect;
 
 void initPlayer()
 {
+	timerUlt = 2.f;
 	patchuliRect = GetRect("patchuli");
 }
 
@@ -28,8 +29,10 @@ void preparePlayer(sfRenderWindow* _window)
 	tempPlayer->scale = 5;
 	tempPlayer->pos.y = 900;
 	tempPlayer->pos.x = 900;
-	tempPlayer->velocity.y = 300;
-	tempPlayer->velocity.x = 300;
+	tempPlayer->velocity.y = 500;
+	tempPlayer->velocity.x = 500;
+	tempPlayer->lifeForce = 3;
+	tempPlayer->spellCard = 3;
 	ajoutPlayer(tempPlayer);
 
 }
@@ -71,6 +74,7 @@ void updatePlayer(sfRenderWindow* _window, sfSprite* _sprite, sfCircleShape* _hi
 {
 
 	timerBall += getDeltaTime();
+	timerUlt += getDeltaTime();
 	timerSprite += getDeltaTime();
 	player* tempPlayer = dlPlayers;
 
@@ -92,11 +96,18 @@ void updatePlayer(sfRenderWindow* _window, sfSprite* _sprite, sfCircleShape* _hi
 		sfSprite_setTextureRect(_sprite, patchuliRect);
 
 		sfRenderWindow_drawSprite(_window, _sprite, NULL);
-		if (sfKeyboard_isKeyPressed(sfKeyC) && timerBall > 0.05f)
+		if ( sfKeyboard_isKeyPressed(sfKeyF) && tempPlayer->spellCard > 0 && timerUlt > 2.f )
 		{
 
-			tempPlayer->velocity.y = 100;
-			tempPlayer->velocity.x = 100;
+			prepareSpellCardShot(_window, &tempPlayer->pos, 50, 50, (sfVector2f) { 25, 25 });
+			timerUlt = 0.f;
+			tempPlayer->spellCard--;
+		}
+		if (sfKeyboard_isKeyPressed(sfKeyC) )
+		{
+
+			tempPlayer->velocity.y = 200;
+			tempPlayer->velocity.x = 200;
 	
 			sfCircleShape_setTexture(_hitPoint, GetTexture("hitbox"), NULL);
 			sfCircleShape_setOrigin(_hitPoint, (sfVector2f) { tempPlayer->scale, tempPlayer->scale  });
@@ -106,8 +117,8 @@ void updatePlayer(sfRenderWindow* _window, sfSprite* _sprite, sfCircleShape* _hi
 		}
 		else
 		{
-			tempPlayer->velocity.y = 300;
-			tempPlayer->velocity.x = 300;
+			tempPlayer->velocity.y = 500;
+			tempPlayer->velocity.x = 500;
 		}
 		tempPlayer = tempPlayer->pNext;
 
@@ -118,22 +129,26 @@ void updatePlayer(sfRenderWindow* _window, sfSprite* _sprite, sfCircleShape* _hi
 }
 void MovementPlayer(player* _player)
 {
-	if(sfKeyboard_isKeyPressed(sfKeyD) && _player->pos.x < 1600)
+	if(sfKeyboard_isKeyPressed(sfKeyD) && _player->pos.x < 1870)
 	{
 		_player->pos.x += _player->velocity.x * getDeltaTime();
 	}
-	if (sfKeyboard_isKeyPressed(sfKeyQ) && _player->pos.x >300)
+	if (sfKeyboard_isKeyPressed(sfKeyQ) && _player->pos.x >0)
 	{
 		_player->pos.x -= _player->velocity.x * getDeltaTime();
 	}
-	if (sfKeyboard_isKeyPressed(sfKeyZ) && _player->pos.y > 100)
+	if (sfKeyboard_isKeyPressed(sfKeyZ) && _player->pos.y > 0)
 	{
 		_player->pos.y -= _player->velocity.y * getDeltaTime();
 	}
-	if (sfKeyboard_isKeyPressed(sfKeyS) && _player->pos.y < 900)
+	if (sfKeyboard_isKeyPressed(sfKeyS) && _player->pos.y < 1030)
 	{
 		_player->pos.y += _player->velocity.y * getDeltaTime();
 	}
 
+}
+player* GetPlayerList()
+{
+	return dlPlayers;
 }
 

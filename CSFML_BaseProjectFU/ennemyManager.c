@@ -6,7 +6,7 @@
 
 // derniere element de la liste des ennemies
 int ennemyNumber = 0;
-
+ennemy* dlEnnemies;
 
 // cr�� un �l�ment de la liste des ennemies
 
@@ -22,7 +22,7 @@ void prepareEnnemy(sfRenderWindow* _window)
 {
 	ennemyNumber++;
 	ennemy* tempEnnemy= (ennemy*)calloc(1, sizeof(ennemy));
-	tempEnnemy->life = 1;
+	tempEnnemy->life = 3;
 	tempEnnemy->scale = 1;
 	tempEnnemy->cooldown = 0;
 	tempEnnemy->pos.y = 100;
@@ -90,7 +90,7 @@ void updateEnnemy(sfRenderWindow* _window, sfSprite* _sprite)
 	tempEnnemy->cooldown += getDeltaTime();
 	if (tempEnnemy->cooldown >= 1.f)
 	{
-		prepareEnnemyShot(_window, &tempEnnemy->pos, rand_int(20,200));
+		prepareEnnemyShot(_window, &tempEnnemy->pos, 60,10,(sfVector2f){42,42});
 		tempEnnemy->cooldown = 0.f;
 	}
 	if (tempEnnemy->pos.x >= 2100 || tempEnnemy->pos.y > 1200 || tempEnnemy->pos.y < -200 || tempEnnemy->pos.x < -200)
@@ -113,3 +113,8 @@ void updateEnnemy(sfRenderWindow* _window, sfSprite* _sprite)
 		
 	
 }
+ennemy* GetEnnemyList()
+{
+	return dlEnnemies;
+}
+

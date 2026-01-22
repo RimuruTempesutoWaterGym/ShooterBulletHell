@@ -10,9 +10,10 @@ particleGroup* dlParticleGroup = 0;
 // cr�� un �l�ment de la liste de groupe de particules
 	sfIntRect particlesRect;
 
-void initParticle()
+	void initParticle()
 {
 	 particlesRect = GetRect("particles");
+
 	
 }
 
@@ -20,7 +21,7 @@ void initParticle()
 void prepareParticleGroup(sfRenderWindow * _window, int nbParticles, sfVector2f _pos,int _rangeY,int _rangeX)
 
 {
-	printf("aa");
+
 	particleGroup * tempParticleGroup = (particleGroup*)calloc(1, sizeof(particleGroup));
 	tempParticleGroup->particlesLife = 10;
 	tempParticleGroup->time = 0;

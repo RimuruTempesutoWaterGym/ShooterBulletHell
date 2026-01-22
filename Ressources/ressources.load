@@ -16,7 +16,8 @@ single boss ../Ressources/Textures/ufoRed.png
 single shot ../Ressources/Textures/Danmaku/shot.png
 single ennemyShot ../Ressources/Textures/Danmaku/ennemyShot.png
 single hitbox ../Ressources/Textures/Danmaku/hitbox.png
-spritesheet particlesSheet ../Ressources/Textures/particles.anim
+spritesheet particlesSheet ../Ressources/Textures/particles.spritesheet
+spritesheet speelCardSheet ../Ressources/Textures/spellcards.spritesheet
 animation explosionAnim ../Ressources/Textures/explosion.anim
 music bismarck ../Ressources/Musics/Bismarck.ogg
 [end]

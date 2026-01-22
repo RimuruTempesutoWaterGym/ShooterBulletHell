@@ -7,6 +7,8 @@ struct player
 	sfVector2f pos;
 	sfVector2f velocity;
 	int scale;
+	int lifeForce;
+	int spellCard;
 
 };
 
@@ -17,3 +19,4 @@ void updatePlayer(sfRenderWindow* _window, sfSprite* _sprite, sfCircleShape* _hi
 player* retirePlayer(player* _player);
 void initPlayer();
 void MovementPlayer(player* _player);
+player* GetPlayerList();

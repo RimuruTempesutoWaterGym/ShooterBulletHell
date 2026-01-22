@@ -7,9 +7,9 @@
 #include "pause.h"
 #include "soundManager.h"
 #include "ennemyManager.h"
+#include "particleManager.h"
 #include "playerManager.h"
 #include "shotManager.h"
-#include "particleManager.h"
 
 
 #include <Windows.h>
@@ -55,6 +55,7 @@ void initGame(Window* _window)
 
 	initPlayer();
 	initParticle();
+	initShot();
 
 	spBG1 = sfSprite_create();
 	spBG2 = sfSprite_create();

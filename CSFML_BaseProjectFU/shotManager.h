@@ -1,6 +1,6 @@
  #pragma once
 #include "tools.h"
-#include "playerManager.h"
+
 
 typedef enum
 {
@@ -11,6 +11,7 @@ typedef enum
 {
 normalShot,
 FlowerShot,
+SpellCardShot,
 }typeShot;
 typedef struct shot shot;
 struct shot
@@ -21,14 +22,19 @@ struct shot
 	shooter shooter;
 	typeShot typeShot;
 	int life;
+	int damage;
 	int scale;
+	float hitTimer;
+	sfBool hasHit;
+	int color;
 
 };
 
 
 void preparePlayerShot(sfRenderWindow* _window, sfVector2f* _pos);
-void prepareEnnemyShot(sfRenderWindow* _window, sfVector2f* _pos,int _nbShot);
-void prepareCircleShot(sfRenderWindow* _window, sfVector2f* _pos, int _nbShot);
+void prepareEnnemyShot(sfRenderWindow* _window, sfVector2f* _pos, int _nbShot, int _scale, sfVector2f _centering);
+void prepareSpellCardShot(sfRenderWindow* _window, sfVector2f* _pos, int _nbShot, int _scale, sfVector2f _centering);
+void prepareCircleShot(sfRenderWindow* _window, sfVector2f* _pos, int _nbShot, int _scale,int damage, sfVector2f _centering, int _origin, int _typeOfShot);
 void prepareRandomShot(sfRenderWindow* _window, sfVector2f* _pos, int _nbShot);
 void prepareLosangeShot(sfRenderWindow* _window, sfVector2f* _pos, int _nbShot);
 void preparePrismShot(sfRenderWindow* _window, sfVector2f* _pos, int _nbShot);
