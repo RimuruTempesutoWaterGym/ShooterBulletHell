@@ -241,3 +241,6 @@ void screenshot(sfRenderWindow* _window)
 	sprintf(filename, "../Ressources/Screenshots/Screenshot-%s-%s.jpg", tmpd, tmph);
 	sfImage_saveToFile(screenshot, filename);
 }
+float easeInOutQuad(float t) {
+	return t < 0.5f ? 2.0f * t * t : 1.0f - pow(-2.0f * t + 2.0f, 2.0f) / 2.0f;
+}

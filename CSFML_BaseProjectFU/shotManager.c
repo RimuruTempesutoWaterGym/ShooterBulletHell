@@ -250,7 +250,111 @@ shot* retireShot(shot* _shot)
 	}
 
 }
+// Boss attack pattern: Rotating Spiral
+void bossAttackSpiral(sfRenderWindow* _window, sfVector2f* _pos, float patternTimer)
+{
+	// Creates a beautiful rotating spiral pattern
+	static float spiralAngle = 0.0f;
 
+	spiralAngle += getDeltaTime() * 2.0f; // Rotation speed
+
+	// Fire 3 streams that rotate
+	for (int stream = 0; stream < 3; stream++)
+	{
+		float streamAngle = spiralAngle + (stream * 2.094f); // 120 degrees apart
+
+		// Each stream has 5 bullets
+		for (int i = 0; i < 5; i++)
+		{
+			float bulletAngle = streamAngle + (i * 0.3f);
+
+			shot* tempShot = (shot*)calloc(1, sizeof(shot));
+			tempShot->shooter = opponent;
+			tempShot->typeShot = normalShot;
+			tempShot->life = 1;
+			tempShot->damage = 1;
+			tempShot->scale = 8;
+			tempShot->hasHit = sfFalse;
+			tempShot->hitTimer = 0;
+
+			// Start at boss center
+			tempShot->pos.x = _pos->x + 47;
+			tempShot->pos.y = _pos->y + 42;
+
+			// Velocity in spiral direction
+			float speed = 150.0f - (i * 20.0f); // Bullets slow down as they go out
+			tempShot->velocity.x = -cos(bulletAngle) * speed;
+			tempShot->velocity.y = -sin(bulletAngle) * speed;
+
+			ajoutShot(tempShot);
+		}
+	}
+}
+void bossAttackExpandingRing(sfRenderWindow* _window, sfVector2f* _pos)
+{
+	// Creates a dense ring that expands outward
+	int bulletCount = 48; // Dense pattern
+
+	for (int i = 0; i < bulletCount; i++)
+	{
+		float angle = (i / (float)bulletCount) * 2.0f * 3.14159265359f;
+
+		shot* tempShot = (shot*)calloc(1, sizeof(shot));
+		tempShot->shooter = opponent;
+		tempShot->typeShot = normalShot;
+		tempShot->life = 1;
+		tempShot->damage = 1;
+		tempShot->scale = 6;
+		tempShot->hasHit = sfFalse;
+		tempShot->hitTimer = 0;
+
+		// Start at boss center
+		tempShot->pos.x = _pos->x + 47;
+		tempShot->pos.y = _pos->y + 42;
+
+		// All bullets move outward at same speed
+		float speed = 120.0f;
+		tempShot->velocity.x = -cos(angle) * speed;
+		tempShot->velocity.y = -sin(angle) * speed;
+
+		ajoutShot(tempShot);
+	}
+}
+void bossAttackAimedBurst(sfRenderWindow* _window, sfVector2f* _bossPos, sfVector2f* _playerPos)
+{
+	// Calculate angle to player
+	float dx = _playerPos->x - (_bossPos->x + 47);
+	float dy = _playerPos->y - (_bossPos->y + 42);
+	float angleToPlayer = atan2(dy, dx);
+
+	// Fire spread of bullets around player direction
+	int bulletCount = 7;
+	float spreadAngle = 0.5f; // Spread in radians
+
+	for (int i = 0; i < bulletCount; i++)
+	{
+		float offset = ((i / (float)(bulletCount - 1)) - 0.5f) * spreadAngle;
+		float angle = angleToPlayer + offset;
+
+		shot* tempShot = (shot*)calloc(1, sizeof(shot));
+		tempShot->shooter = opponent;
+		tempShot->typeShot = normalShot;
+		tempShot->life = 1;
+		tempShot->damage = 1;
+		tempShot->scale = 10;
+		tempShot->hasHit = sfFalse;
+		tempShot->hitTimer = 0;
+
+		tempShot->pos.x = _bossPos->x + 47;
+		tempShot->pos.y = _bossPos->y + 42;
+
+		float speed = 200.0f;
+		tempShot->velocity.x = -cos(angle) * speed;
+		tempShot->velocity.y = -sin(angle) * speed;
+
+		ajoutShot(tempShot);
+	}
+}
 //affiche toutes les particules des groupe des ennemies
 void updateShot(sfRenderWindow* _window, sfCircleShape* _shot)
 {
@@ -324,14 +428,9 @@ void updateShot(sfRenderWindow* _window, sfCircleShape* _shot)
 					tempPlayer->lifeForce-= tempShot->damage;
 				tempShot->hasHit = sfTrue;
 				}
-				if (tempPlayer->lifeForce < 1)
-				{
-					prepareParticleGroup(_window, 10, (sfVector2f) { tempPlayer->pos.x + 47, tempPlayer->pos.y + 42 }, 40, 40);
+
 					tempPlayer = tempPlayer->pNext;
-				}
-				else {
-					tempPlayer = tempPlayer->pNext;
-				}
+				
 
 			}
 			sfCircleShape_setTexture(_shot, GetTexture("ennemyShot"),NULL);

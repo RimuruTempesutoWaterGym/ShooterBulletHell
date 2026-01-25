@@ -229,3 +229,4 @@ void displayFrameRate(sfRenderWindow* _window, sfText* _text);
 //-----------------------------------------------------------
 void screenshot(sfRenderWindow* _window);
 float Clamp(float x);
+float easeInOutQuad(float t);

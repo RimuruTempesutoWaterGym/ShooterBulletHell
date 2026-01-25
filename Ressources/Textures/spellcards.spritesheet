@@ -1,0 +1,7 @@
+[path]
+../Ressources/Textures/Danmaku/spellcardshot.png
+[end]
+// Sprite Name | left | top | width | height
+[config]
+spellcards	0	0	64	64
+[end]

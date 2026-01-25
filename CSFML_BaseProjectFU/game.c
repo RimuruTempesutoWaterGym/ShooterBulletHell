@@ -65,8 +65,8 @@ void initGame(Window* _window)
 	spParticle = sfCircleShape_create();
 	spHitboxPlayer = sfCircleShape_create();
 	
-	sfSprite_setTexture(spBG1, GetTexture("BG1"), sfTrue);
-	sfSprite_setTexture(spBG2, GetTexture("BG2"), sfTrue);
+	sfSprite_setTexture(spBG1, GetTexture("BG"), sfTrue);
+	sfSprite_setTexture(spBG2, GetTexture("BG"), sfTrue);
 
 	sfSprite_setPosition(spBG2, vector2f(0.0f, -1080.0f));
 	
@@ -108,7 +108,7 @@ void updateGame(Window* _window)
 		if (isActualEnnemyAlive() == 0 && ennemyTimer > getEnnemyNumber() * 4.f)
 		{
 	
-			prepareEnnemy(_window->renderWindow);
+			prepareBoss1(_window->renderWindow);
 	
 		}
 	
