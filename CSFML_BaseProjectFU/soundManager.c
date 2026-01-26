@@ -178,6 +178,7 @@ void Play_Music(State _state)
 		{
 			if (tempSound->type == MUSIC)
 			{
+
 				sfMusic_stop(tempSound->music);
 				sfMusic_play(tempSound->music);
 				sfMusic_setLoop(tempSound->music, sfTrue);

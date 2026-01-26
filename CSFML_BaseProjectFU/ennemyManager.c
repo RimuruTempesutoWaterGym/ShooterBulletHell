@@ -7,7 +7,7 @@
 // derniere element de la liste des ennemies
 int ennemyNumber = 0;
 ennemy* dlEnnemies;
-
+int wave = 1;
 // cr�� un �l�ment de la liste des ennemies
 
 
@@ -25,6 +25,7 @@ void prepareEnnemy(sfRenderWindow* _window)
 
     // Basic stats
     tempEnnemy->life = 3;
+    tempEnnemy->maxLife = 3;
     tempEnnemy->scale = 1;
     tempEnnemy->cooldown = 0;
 
@@ -54,7 +55,8 @@ void prepareBoss1(sfRenderWindow* _window)
     ennemy* tempEnnemy = (ennemy*)calloc(1, sizeof(ennemy));
 
     // Junko's stats
-    tempEnnemy->life = 200;  // Final boss health
+    tempEnnemy->life = 200;  
+    tempEnnemy->maxLife = 200;  // Final boss health
     tempEnnemy->scale = 2.5f;
     tempEnnemy->cooldown = 0;
 
@@ -90,6 +92,7 @@ void prepareBossEnnemy(sfRenderWindow* _window)
 
     // Boss stats
     tempEnnemy->life = 100;  // Boss has more health
+    tempEnnemy->maxLife = 100;  // Boss has more health
     tempEnnemy->scale = 2.0f; // Bigger sprite
     tempEnnemy->cooldown = 0;
 
@@ -123,38 +126,44 @@ void ajoutEnnemy( ennemy* _ennemy)
 	dlEnnemies = _ennemy;
 }
 
-void bossAttackPurelyBulletHell(sfRenderWindow* _window, sfVector2f* _pos, BossData* bossData)
+void bossAttackPurelyBulletHell(sfRenderWindow* _window, sfVector2f* _pos, BossData* bossData,float _life, float _maxHealth)
 {
     bossData->phaseTimer += getDeltaTime();
     bossData->ringTimer += getDeltaTime();
 
     // Phase 1: Slow purple/red rings (0-15 seconds)
-    if (bossData->phaseTimer < 15.0f)
+    if (_life > _maxHealth / 2)
     {
-        if (bossData->ringTimer >= 1.2f)  // Slow, deliberate rings
+        if (bossData->ringTimer >= 0.3f)  // Slow, deliberate rings
         {
             // Purple ring
-            int bulletCount = 32;
-            float randomOffset = (rand() % 628) / 100.0f;  // Random rotation
-
+            int bulletCount = 70;
+            wave = -wave;
+            float angle = 0;
             for (int i = 0; i < bulletCount; i++)
             {
-                float angle = randomOffset + (i / (float)bulletCount) * 2.0f * 3.14159265359f;
-
+                if (wave == -1)
+                {
+                     angle = (bulletCount/20) +(i / (float)bulletCount) * 2.0f * 3.14159265359f;
+                }
+                else
+                {
+                     angle =  (i / (float)bulletCount) * 2.0f * 3.14159265359f;
+                }
                 shot* tempShot = (shot*)calloc(1, sizeof(shot));
                 tempShot->shooter = opponent;
                 tempShot->typeShot = normalShot;
                 tempShot->life = 1;
                 tempShot->damage = 1;
-                tempShot->scale = 12;
+                tempShot->scale = 15;
                 tempShot->hasHit = sfFalse;
                 tempShot->hitTimer = 0;
 
-                tempShot->pos.x = _pos->x + 47;
-                tempShot->pos.y = _pos->y + 42;
+                tempShot->pos.x = _pos->x + 47 ;
+                tempShot->pos.y = _pos->y + 42 ;
 
                 // Slow speed for sluggish feel
-                float speed = 80.0f + (rand() % 20);  // Slight randomness
+                float speed = 200.0f;
                 tempShot->velocity.x = -cos(angle) * speed;
                 tempShot->velocity.y = -sin(angle) * speed;
 
@@ -165,7 +174,7 @@ void bossAttackPurelyBulletHell(sfRenderWindow* _window, sfVector2f* _pos, BossD
         }
     }
     // Phase 2: Add fast blue rings on top (15-30 seconds)
-    else if (bossData->phaseTimer < 30.0f)
+    else if ( _life < _maxHealth/2 && _life > _maxHealth / 4)
     {
         // Continue purple rings but faster
         if (bossData->ringTimer >= 0.8f)
@@ -190,7 +199,7 @@ void bossAttackPurelyBulletHell(sfRenderWindow* _window, sfVector2f* _pos, BossD
                 tempShot->pos.y = _pos->y + 42;
 
                 // Fast blue bullets
-                float speed = 180.0f + (rand() % 40);
+                float speed = 300.f;
                 tempShot->velocity.x = -cos(angle) * speed;
                 tempShot->velocity.y = -sin(angle) * speed;
 
@@ -254,7 +263,7 @@ void bossAttackPurelyBulletHell(sfRenderWindow* _window, sfVector2f* _pos, BossD
                     tempShot->typeShot = normalShot;
                     tempShot->life = 1;
                     tempShot->damage = 1;
-                    tempShot->scale = 6;
+                    tempShot->scale = 12    ;
                     tempShot->hasHit = sfFalse;
                     tempShot->hitTimer = 0;
 
@@ -324,13 +333,8 @@ void updateEnnemy(sfRenderWindow* _window, sfSprite* _sprite)
 
     while (tempEnnemy != NULL)
     {
-        if (tempEnnemy->bossData != NULL)  // This is Junko
-        {
-            BossData* junkoData = (BossData*)tempEnnemy->bossData;
-            bossAttackPurelyBulletHell(_window, &tempEnnemy->pos, junkoData);
-        }
-            tempEnnemy->moveTimer += getDeltaTime();
-
+     
+        tempEnnemy->moveTimer += getDeltaTime();
             switch (tempEnnemy->state)
             {
             case STATE_ENTER:
@@ -362,16 +366,20 @@ void updateEnnemy(sfRenderWindow* _window, sfSprite* _sprite)
                 tempEnnemy->cooldown += getDeltaTime();
 
                 // Rotating spiral every 0.1 seconds
-                if (tempEnnemy->cooldown >= 0.1f)
+                if (tempEnnemy->bossData != NULL)
+                {
+                    bossAttackPurelyBulletHell(_window, &tempEnnemy->pos, tempEnnemy->bossData, tempEnnemy->life,tempEnnemy->maxLife);
+                }
+                if (tempEnnemy->bossData == NULL && tempEnnemy->cooldown >= 0.1f)
                 {
                     bossAttackSpiral(_window, &tempEnnemy->pos, tempEnnemy->patternTimer);
                     tempEnnemy->cooldown = 0.0f;
                 }
-
+           
                 // Dense ring every 3 seconds
                 static float ringTimer = 0.0f;
                 ringTimer += getDeltaTime();
-                if (ringTimer >= 3.0f)
+                if (tempEnnemy->bossData == NULL && ringTimer >= 3.0f)
                 {
                     bossAttackExpandingRing(_window, &tempEnnemy->pos);
                     ringTimer = 0.0f;
@@ -379,14 +387,17 @@ void updateEnnemy(sfRenderWindow* _window, sfSprite* _sprite)
 
                 break;
             }
-            }
-
+        }
+       
+        
+  
             // Draw
             sfSprite_setPosition(_sprite, tempEnnemy->pos);
             sfSprite_setTexture(_sprite, GetTexture("enemy"), sfTrue);
             sfSprite_setScale(_sprite, (sfVector2f) { tempEnnemy->scale, tempEnnemy->scale });
             sfRenderWindow_drawSprite(_window, _sprite, NULL);
         
+
             tempEnnemy = tempEnnemy->pNext;
       
     }

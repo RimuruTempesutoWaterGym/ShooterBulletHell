@@ -19,12 +19,14 @@ typedef struct {
     int currentPhase;
     float ringTimer;
     float laneTimer;
+
 } BossData;
 typedef struct ennemy ennemy;
 struct ennemy {
     sfVector2f pos;
     sfVector2f velocity;
     float life;
+    float maxLife;
     float scale;
     float cooldown;
 
@@ -54,3 +56,4 @@ void initEnnemy();
 ennemy* GetEnnemyList();
 void prepareBossEnnemy(sfRenderWindow* _window);
 void prepareBoss1(sfRenderWindow* _window);
+void bossAttackPurelyBulletHell(sfRenderWindow* _window, sfVector2f* _pos, BossData* bossData, float _life);

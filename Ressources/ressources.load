@@ -5,7 +5,7 @@ font zelda ../Ressources/Fonts/The_Wild_Breath_of_Zelda.otf
 [end]
 [menu]
 single menu ../Ressources/Textures/Menu.png
-music spatial ../Ressources/Musics/spatial_theme.ogg
+music touhou ../Ressources/Musics/touhou.ogg
 font big ../Ressources/Fonts/full_Pack_2025.ttf
 [end]
 [game]
@@ -20,5 +20,5 @@ single hitbox ../Ressources/Textures/Danmaku/hitbox.png
 spritesheet particlesSheet ../Ressources/Textures/particles.spritesheet
 spritesheet speelCardSheet ../Ressources/Textures/spellcards.spritesheet
 animation explosionAnim ../Ressources/Textures/explosion.anim
-music bismarck ../Ressources/Musics/Bismarck.ogg
+music touhou ../Ressources/Musics/touhou.ogg
 [end]

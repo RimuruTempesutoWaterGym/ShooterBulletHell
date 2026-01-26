@@ -461,7 +461,9 @@ void updateShot(sfRenderWindow* _window, sfCircleShape* _shot)
 			sfCircleShape_setRadius(_shot, tempShot->scale);
 			tempShot->pos.y -= tempShot->velocity.y * getDeltaTime();
 			tempShot->pos.x -= tempShot->velocity.x * getDeltaTime();
-				sfRenderWindow_drawCircleShape(_window, _shot, NULL);
+				tempShot->velocity.x -= tempShot->velocity.x * getDeltaTime() / 20;
+				tempShot->velocity.y -= tempShot->velocity.y * getDeltaTime() / 20;
+			sfRenderWindow_drawCircleShape(_window, _shot, NULL);
 			tempShot = tempShot->pNext;
 		}
 	}
