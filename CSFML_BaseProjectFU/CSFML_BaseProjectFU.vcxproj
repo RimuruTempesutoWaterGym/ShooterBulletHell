@@ -178,6 +178,7 @@
     <ClCompile Include="shotManager.c" />
     <ClCompile Include="tools.c" />
     <ClCompile Include="viewManager.c" />
+    <ClCompile Include="waveManager.c" />
     <ClCompile Include="windowManager.c" />
   </ItemGroup>
   <ItemGroup>
@@ -200,6 +201,7 @@
     <ClInclude Include="shotManager.h" />
     <ClInclude Include="tools.h" />
     <ClInclude Include="viewManager.h" />
+    <ClInclude Include="waveManager.h" />
     <ClInclude Include="windowManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

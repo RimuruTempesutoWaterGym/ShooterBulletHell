@@ -10,6 +10,7 @@
 #include "particleManager.h"
 #include "playerManager.h"
 #include "shotManager.h"
+#include "waveManager.h"
 
 
 #include <Windows.h>
@@ -64,7 +65,8 @@ void initGame(Window* _window)
 	spShot = sfCircleShape_create();
 	spParticle = sfCircleShape_create();
 	spHitboxPlayer = sfCircleShape_create();
-	
+	initWaveManager(&waveManager);
+	startWave(&waveManager, 1);
 	sfSprite_setTexture(spBG1, GetTexture("BG"), sfTrue);
 	sfSprite_setTexture(spBG2, GetTexture("BG"), sfTrue);
 
@@ -91,27 +93,29 @@ void initGame(Window* _window)
 void updateGame(Window* _window)
 {
 		timer += getDeltaTime();
-		if(getEnnemyNumber() == 0)
-		{
-			startTimer += getDeltaTime();
-			if (startTimer > 1.f)
-			{
-				prepareEnnemy(_window->renderWindow);
-			}
-		}
-		if (getEnnemyNumber() > 0 && isActualEnnemyAlive() == 0)
-		{
-			ennemyTimer += getDeltaTime();
-		}
+
 
 		
-		if (isActualEnnemyAlive() == 0 && ennemyTimer > getEnnemyNumber() * 4.f)
+		updateWaveManager(&waveManager, _window->renderWindow);
+	
+		if (!waveManager.waveActive && !isActualEnnemyAlive())
 		{
-	
-			prepareBoss1(_window->renderWindow);
-	
+			static float nextWaveDelay = 0.0f;
+			nextWaveDelay += getDeltaTime();
+
+			if (nextWaveDelay >= 3.0f)
+			{
+				waveManager.currentWave++;
+
+				if (waveManager.currentWave <= 4)
+				{
+					startWave(&waveManager, waveManager.currentWave);
+				}
+
+				nextWaveDelay = 0.0f;
+			}
 		}
-	
+
 		for (int i = 0; i < 8; i++)
 		{
 			if (Gamepad_isButtonPressed(i, OPTION) && timer > 0.2f)

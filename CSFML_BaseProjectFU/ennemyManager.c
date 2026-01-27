@@ -2,22 +2,98 @@
 #include "textureManager.h"
 #include "particleManager.h"
 #include "shotManager.h"
+#include "playerManager.h"
 #include "tools.h"
 
-// derniere element de la liste des ennemies
-int ennemyNumber = 0;
-ennemy* dlEnnemies;
-int wave = 1;
-// cr�� un �l�ment de la liste des ennemies
+// ============================================================================
+// GLOBALS
+// ============================================================================
 
+int ennemyNumber = 0;
+ennemy* dlEnnemies = NULL;
+
+// ============================================================================
+// CONSTANTS
+// ============================================================================
+
+#define PI 3.14159265358979323846f
+
+// ============================================================================
+// INITIALIZATION
+// ============================================================================
 
 void initEnnemy()
 {
-
+    dlEnnemies = NULL;
+    ennemyNumber = 0;
 }
 
+// ============================================================================
+// LIST MANAGEMENT
+// ============================================================================
 
-// cree un element de la liste des ennemies
+void ajoutEnnemy(ennemy* _ennemy)
+{
+    _ennemy->pNext = dlEnnemies;
+    dlEnnemies = _ennemy;
+}
+
+ennemy* retireEnnemy(ennemy* _ennemy)
+{
+    if (_ennemy == dlEnnemies)
+    {
+        ennemy* tempEnnemy = _ennemy->pNext;
+        dlEnnemies = tempEnnemy;
+
+        // Free boss data if it exists
+        if (_ennemy->bossData != NULL)
+        {
+            free(_ennemy->bossData);
+        }
+
+        free(_ennemy);
+        ennemyNumber--;
+        return tempEnnemy;
+    }
+    else
+    {
+        ennemy* tempEnnemy = dlEnnemies;
+        while (tempEnnemy->pNext != _ennemy)
+        {
+            tempEnnemy = tempEnnemy->pNext;
+        }
+        tempEnnemy->pNext = _ennemy->pNext;
+
+        if (_ennemy->bossData != NULL)
+        {
+            free(_ennemy->bossData);
+        }
+
+        free(_ennemy);
+        ennemyNumber--;
+        return tempEnnemy->pNext;
+    }
+}
+
+ennemy* GetEnnemyList()
+{
+    return dlEnnemies;
+}
+
+int getEnnemyNumber()
+{
+    return ennemyNumber;
+}
+
+int isActualEnnemyAlive()
+{
+    return (dlEnnemies != NULL) ? 1 : 0;
+}
+
+// ============================================================================
+// MINION SPAWNING
+// ============================================================================
+
 void prepareEnnemy(sfRenderWindow* _window)
 {
     ennemyNumber++;
@@ -26,37 +102,118 @@ void prepareEnnemy(sfRenderWindow* _window)
     // Basic stats
     tempEnnemy->life = 3;
     tempEnnemy->maxLife = 3;
-    tempEnnemy->scale = 1;
+    tempEnnemy->scale = 1.0f;
     tempEnnemy->cooldown = 0;
+    tempEnnemy->bossData = NULL;
 
-    // Initial state
+    // Movement state
     tempEnnemy->state = STATE_ENTER;
-
-    // Entry pattern: come from top-left, move to center-top area
     tempEnnemy->startPos = (sfVector2f){ -100, 100 };
-    tempEnnemy->targetPos = (sfVector2f){ 960, 300 }; // Center-top of screen (assuming 1920x1080)
+    tempEnnemy->targetPos = (sfVector2f){ 960, 300 };
     tempEnnemy->pos = tempEnnemy->startPos;
 
-    // Movement timing
+    // Timing
     tempEnnemy->moveTimer = 0.0f;
-    tempEnnemy->moveDuration = 2.0f; // Takes 2 seconds to reach position
+    tempEnnemy->moveDuration = 2.0f;
 
-    // Pattern behavior (wave movement)
+    // Pattern behavior
     tempEnnemy->patternTimer = 0.0f;
-    tempEnnemy->waveAmplitude = 150.0f;  // How far left/right to wave
-    tempEnnemy->waveFrequency = 1.5f;    // How fast to wave
-
+    tempEnnemy->waveAmplitude = 150.0f;
+    tempEnnemy->waveFrequency = 1.5f;
 
     ajoutEnnemy(tempEnnemy);
 }
-void prepareBoss1(sfRenderWindow* _window)
+
+void prepareFastEnnemy(sfRenderWindow* _window)
+{
+    ennemyNumber++;
+    ennemy* tempEnnemy = (ennemy*)calloc(1, sizeof(ennemy));
+
+    tempEnnemy->life = 1;
+    tempEnnemy->maxLife = 1;
+    tempEnnemy->scale = 0.8f;
+    tempEnnemy->cooldown = 0;
+    tempEnnemy->bossData = NULL;
+
+    tempEnnemy->state = STATE_ENTER;
+    tempEnnemy->startPos = (sfVector2f){ -100, 150 };
+    tempEnnemy->targetPos = (sfVector2f){ 960, 250 };
+    tempEnnemy->pos = tempEnnemy->startPos;
+
+    tempEnnemy->moveTimer = 0.0f;
+    tempEnnemy->moveDuration = 1.0f;
+
+    tempEnnemy->patternTimer = 0.0f;
+    tempEnnemy->waveAmplitude = 200.0f;
+    tempEnnemy->waveFrequency = 2.0f;
+
+    ajoutEnnemy(tempEnnemy);
+}
+
+void prepareTankEnnemy(sfRenderWindow* _window)
+{
+    ennemyNumber++;
+    ennemy* tempEnnemy = (ennemy*)calloc(1, sizeof(ennemy));
+
+    tempEnnemy->life = 10;
+    tempEnnemy->maxLife = 10;
+    tempEnnemy->scale = 1.5f;
+    tempEnnemy->cooldown = 0;
+    tempEnnemy->bossData = NULL;
+
+    tempEnnemy->state = STATE_ENTER;
+    tempEnnemy->startPos = (sfVector2f){ 960, -100 };
+    tempEnnemy->targetPos = (sfVector2f){ 960, 300 };
+    tempEnnemy->pos = tempEnnemy->startPos;
+
+    tempEnnemy->moveTimer = 0.0f;
+    tempEnnemy->moveDuration = 3.0f;
+
+    tempEnnemy->patternTimer = 0.0f;
+    tempEnnemy->waveAmplitude = 50.0f;
+    tempEnnemy->waveFrequency = 0.3f;
+
+    ajoutEnnemy(tempEnnemy);
+}
+
+void prepareShooterEnnemy(sfRenderWindow* _window)
+{
+    ennemyNumber++;
+    ennemy* tempEnnemy = (ennemy*)calloc(1, sizeof(ennemy));
+
+    tempEnnemy->life = 3;
+    tempEnnemy->maxLife = 3;
+    tempEnnemy->scale = 1.0f;
+    tempEnnemy->cooldown = 0;
+    tempEnnemy->bossData = NULL;
+
+    tempEnnemy->state = STATE_ENTER;
+    tempEnnemy->startPos = (sfVector2f){ 2020, 200 };
+    tempEnnemy->targetPos = (sfVector2f){ 1600, 250 };
+    tempEnnemy->pos = tempEnnemy->startPos;
+
+    tempEnnemy->moveTimer = 0.0f;
+    tempEnnemy->moveDuration = 2.0f;
+
+    tempEnnemy->patternTimer = 0.0f;
+    tempEnnemy->waveAmplitude = 100.0f;
+    tempEnnemy->waveFrequency = 1.0f;
+
+    ajoutEnnemy(tempEnnemy);
+}
+
+// ============================================================================
+// BOSS SPAWNING
+// ============================================================================
+
+void prepareJunkoBoss(sfRenderWindow* _window)
 {
     ennemyNumber++;
     ennemy* tempEnnemy = (ennemy*)calloc(1, sizeof(ennemy));
 
     // Junko's stats
-    tempEnnemy->life = 200;  
-    tempEnnemy->maxLife = 200;  // Final boss health
+    tempEnnemy->life = 200;
+    tempEnnemy->maxLife = 200;
     tempEnnemy->scale = 2.5f;
     tempEnnemy->cooldown = 0;
 
@@ -73,338 +230,437 @@ void prepareBoss1(sfRenderWindow* _window)
     tempEnnemy->patternTimer = 0.0f;
     tempEnnemy->waveAmplitude = 100.0f;
     tempEnnemy->waveFrequency = 0.3f;
+
     // Allocate boss-specific data
     BossData* bossData = (BossData*)calloc(1, sizeof(BossData));
     bossData->phaseTimer = 0.0f;
     bossData->currentPhase = 0;
-    bossData->ringTimer = 0.0f;
+    bossData->attack1Timer = 0.0f;
     bossData->laneTimer = 0.0f;
 
-    // Store boss data 
-     tempEnnemy->bossData = bossData;
+    tempEnnemy->bossData = bossData;
 
     ajoutEnnemy(tempEnnemy);
 }
-void prepareBossEnnemy(sfRenderWindow* _window)
+
+void prepareRemiliaBoss(sfRenderWindow* _window)
 {
     ennemyNumber++;
     ennemy* tempEnnemy = (ennemy*)calloc(1, sizeof(ennemy));
 
-    // Boss stats
-    tempEnnemy->life = 100;  // Boss has more health
-    tempEnnemy->maxLife = 100;  // Boss has more health
-    tempEnnemy->scale = 2.0f; // Bigger sprite
+    // Remilia's stats
+    tempEnnemy->life = 150;
+    tempEnnemy->maxLife = 150;
+    tempEnnemy->scale = 2.5f;
     tempEnnemy->cooldown = 0;
 
-    // Movement state
+    // Movement
     tempEnnemy->state = STATE_ENTER;
-
-    // Boss enters from top center
-    tempEnnemy->startPos = (sfVector2f){ 960, -150 };
-    tempEnnemy->targetPos = (sfVector2f){ 960, 200 };  // Stop near top
+    tempEnnemy->startPos = (sfVector2f){ 960, -200 };
+    tempEnnemy->targetPos = (sfVector2f){ 960, 200 };
     tempEnnemy->pos = tempEnnemy->startPos;
 
-    // Movement timing
     tempEnnemy->moveTimer = 0.0f;
-    tempEnnemy->moveDuration = 2.5f;  // Slow, dramatic entrance
+    tempEnnemy->moveDuration = 2.0f;
 
-    // Pattern behavior - smooth horizontal movement
+    // Faster movement than Junko
     tempEnnemy->patternTimer = 0.0f;
-    tempEnnemy->waveAmplitude = 300.0f;  // Move left-right across screen
-    tempEnnemy->waveFrequency = 0.5f;    // Slow sweeping motion
+    tempEnnemy->waveAmplitude = 200.0f;
+    tempEnnemy->waveFrequency = 0.7f;
 
-    tempEnnemy->velocity = (sfVector2f){ 0, 0 };
+    // Allocate boss-specific data
+    BossData* bossData = (BossData*)calloc(1, sizeof(BossData));
+    bossData->phaseTimer = 0.0f;
+    bossData->currentPhase = 1; // Different phase ID for Remilia
+    bossData->attack1Timer = 0.0f;
+    bossData->laneTimer = 0.0f;
+
+    tempEnnemy->bossData = bossData;
 
     ajoutEnnemy(tempEnnemy);
 }
 
-
-// ajoute un element de la liste des ennemies
-void ajoutEnnemy( ennemy* _ennemy)
+void prepareFlandreBoss(sfRenderWindow* _window)
 {
-	_ennemy->pNext = dlEnnemies;
-	dlEnnemies = _ennemy;
+    ennemyNumber++;
+    ennemy* tempEnnemy = (ennemy*)calloc(1, sizeof(ennemy));
+
+    tempEnnemy->life = 180;
+    tempEnnemy->maxLife = 180;
+    tempEnnemy->scale = 2.3f;
+    tempEnnemy->cooldown = 0;
+
+    tempEnnemy->state = STATE_ENTER;
+    tempEnnemy->startPos = (sfVector2f){ 960, -200 };
+    tempEnnemy->targetPos = (sfVector2f){ 960, 220 };
+    tempEnnemy->pos = tempEnnemy->startPos;
+
+    tempEnnemy->moveTimer = 0.0f;
+    tempEnnemy->moveDuration = 2.5f;
+
+    tempEnnemy->patternTimer = 0.0f;
+    tempEnnemy->waveAmplitude = 150.0f;
+    tempEnnemy->waveFrequency = 0.5f;
+
+    BossData* bossData = (BossData*)calloc(1, sizeof(BossData));
+    bossData->phaseTimer = 0.0f;
+    bossData->currentPhase = 2;
+    bossData->attack1Timer = 0.0f;
+    bossData->laneTimer = 0.0f;
+
+    tempEnnemy->bossData = bossData;
+
+    ajoutEnnemy(tempEnnemy);
 }
 
-void bossAttackPurelyBulletHell(sfRenderWindow* _window, sfVector2f* _pos, BossData* bossData,float _life, float _maxHealth)
+void prepareYukariBoss(sfRenderWindow* _window)
+{
+    ennemyNumber++;
+    ennemy* tempEnnemy = (ennemy*)calloc(1, sizeof(ennemy));
+
+    tempEnnemy->life = 250;
+    tempEnnemy->maxLife = 250;
+    tempEnnemy->scale = 2.7f;
+    tempEnnemy->cooldown = 0;
+
+    tempEnnemy->state = STATE_ENTER;
+    tempEnnemy->startPos = (sfVector2f){ 960, -200 };
+    tempEnnemy->targetPos = (sfVector2f){ 960, 230 };
+    tempEnnemy->pos = tempEnnemy->startPos;
+
+    tempEnnemy->moveTimer = 0.0f;
+    tempEnnemy->moveDuration = 3.5f;
+
+    tempEnnemy->patternTimer = 0.0f;
+    tempEnnemy->waveAmplitude = 120.0f;
+    tempEnnemy->waveFrequency = 0.4f;
+
+    BossData* bossData = (BossData*)calloc(1, sizeof(BossData));
+    bossData->phaseTimer = 0.0f;
+    bossData->currentPhase = 3;
+    bossData->attack1Timer = 0.0f;
+    bossData->laneTimer = 0.0f;
+
+    tempEnnemy->bossData = bossData;
+
+    ajoutEnnemy(tempEnnemy);
+}
+
+// ============================================================================
+// BOSS ATTACK PATTERNS
+// ============================================================================
+
+
+void bossAttackJunko(sfRenderWindow* _window, sfVector2f* _pos, BossData* bossData, float _life, float _maxHealth)
 {
     bossData->phaseTimer += getDeltaTime();
-    bossData->ringTimer += getDeltaTime();
+    bossData->attack1Timer += getDeltaTime();
 
-    // Phase 1: Slow purple/red rings (0-15 seconds)
+    static int waveDirection = 1;
+    sfVector2f center = { _pos->x + 47, _pos->y + 42 };
+
+    // Phase 1: Rotating dense rings (HP > 50%)
     if (_life > _maxHealth / 2)
     {
-        if (bossData->ringTimer >= 0.3f)  // Slow, deliberate rings
+        if (bossData->attack1Timer >= 0.3f)
         {
-            // Purple ring
-            int bulletCount = 70;
-            wave = -wave;
-            float angle = 0;
-            for (int i = 0; i < bulletCount; i++)
-            {
-                if (wave == -1)
-                {
-                     angle = (bulletCount/20) +(i / (float)bulletCount) * 2.0f * 3.14159265359f;
-                }
-                else
-                {
-                     angle =  (i / (float)bulletCount) * 2.0f * 3.14159265359f;
-                }
-                shot* tempShot = (shot*)calloc(1, sizeof(shot));
-                tempShot->shooter = opponent;
-                tempShot->typeShot = normalShot;
-                tempShot->life = 1;
-                tempShot->damage = 1;
-                tempShot->scale = 15;
-                tempShot->hasHit = sfFalse;
-                tempShot->hitTimer = 0;
+            waveDirection = -waveDirection;
+            float angleOffset = (waveDirection == -1) ? 3.5f : 0.0f;
 
-                tempShot->pos.x = _pos->x + 47 ;
-                tempShot->pos.y = _pos->y + 42 ;
+            createBulletRing(center, 70, angleOffset, 200.0f, 15, 1);
 
-                // Slow speed for sluggish feel
-                float speed = 200.0f;
-                tempShot->velocity.x = -cos(angle) * speed;
-                tempShot->velocity.y = -sin(angle) * speed;
-
-                ajoutShot(tempShot);
-            }
-
-            bossData->ringTimer = 0.0f;
+            bossData->attack1Timer = 0.0f;
         }
     }
-    // Phase 2: Add fast blue rings on top (15-30 seconds)
-    else if ( _life < _maxHealth/2 && _life > _maxHealth / 4)
+    // Phase 2: Faster random rings (50% > HP > 25%)
+    else if (_life > _maxHealth / 4)
     {
-        // Continue purple rings but faster
-        if (bossData->ringTimer >= 0.8f)
+        if (bossData->attack1Timer >= 0.8f)
         {
-            int bulletCount = 40;
             float randomOffset = (rand() % 628) / 100.0f;
+            createBulletRing(center, 40, randomOffset, 300.0f, 10, 1);
 
-            for (int i = 0; i < bulletCount; i++)
-            {
-                float angle = randomOffset + (i / (float)bulletCount) * 2.0f * 3.14159265359f;
-
-                shot* tempShot = (shot*)calloc(1, sizeof(shot));
-                tempShot->shooter = opponent;
-                tempShot->typeShot = normalShot;
-                tempShot->life = 1;
-                tempShot->damage = 1;
-                tempShot->scale = 10;
-                tempShot->hasHit = sfFalse;
-                tempShot->hitTimer = 0;
-
-                tempShot->pos.x = _pos->x + 47;
-                tempShot->pos.y = _pos->y + 42;
-
-                // Fast blue bullets
-                float speed = 300.f;
-                tempShot->velocity.x = -cos(angle) * speed;
-                tempShot->velocity.y = -sin(angle) * speed;
-
-                ajoutShot(tempShot);
-            }
-
-            bossData->ringTimer = 0.0f;
+            bossData->attack1Timer = 0.0f;
         }
     }
-    // Phase 3: CHAOS - Dense rings + confining lanes (30+ seconds)
+    // Phase 3: CHAOS - Dense rings + lanes (HP < 25%)
     else
     {
         bossData->laneTimer += getDeltaTime();
 
         // Super dense rings
-        if (bossData->ringTimer >= 0.5f)
+        if (bossData->attack1Timer >= 0.5f)
         {
-            int bulletCount = 48;  // VERY dense
             float randomOffset = (rand() % 628) / 100.0f;
+            float randomSpeed = 150.0f + (rand() % 60);
+            createBulletRing(center, 48, randomOffset, randomSpeed, 8, 1);
 
-            for (int i = 0; i < bulletCount; i++)
-            {
-                float angle = randomOffset + (i / (float)bulletCount) * 2.0f * 3.14159265359f;
-
-                shot* tempShot = (shot*)calloc(1, sizeof(shot));
-                tempShot->shooter = opponent;
-                tempShot->typeShot = normalShot;
-                tempShot->life = 1;
-                tempShot->damage = 1;
-                tempShot->scale = 8;
-                tempShot->hasHit = sfFalse;
-                tempShot->hitTimer = 0;
-
-                tempShot->pos.x = _pos->x + 47;
-                tempShot->pos.y = _pos->y + 42;
-
-                float speed = 150.0f + (rand() % 60);
-                tempShot->velocity.x = -cos(angle) * speed;
-                tempShot->velocity.y = -sin(angle) * speed;
-
-                ajoutShot(tempShot);
-            }
-
-            bossData->ringTimer = 0.0f;
+            bossData->attack1Timer = 0.0f;
         }
 
-        // 24-way confining lanes
+        // Confining lanes
         if (bossData->laneTimer >= 2.0f)
         {
-            int laneCount = 24;
-
-            for (int i = 0; i < laneCount; i++)
-            {
-                float angle = (i / (float)laneCount) * 2.0f * 3.14159265359f;
-
-                // Create a "lane" of bullets
-                for (int depth = 0; depth < 8; depth++)
-                {
-                    shot* tempShot = (shot*)calloc(1, sizeof(shot));
-                    tempShot->shooter = opponent;
-                    tempShot->typeShot = normalShot;
-                    tempShot->life = 1;
-                    tempShot->damage = 1;
-                    tempShot->scale = 12    ;
-                    tempShot->hasHit = sfFalse;
-                    tempShot->hitTimer = 0;
-
-                    // Spread bullets out along the lane
-                    float distance = 50.0f + (depth * 30.0f);
-                    tempShot->pos.x = _pos->x + 47 + cos(angle) * distance;
-                    tempShot->pos.y = _pos->y + 42 + sin(angle) * distance;
-
-                    // All move outward slowly
-                    float speed = 100.0f;
-                    tempShot->velocity.x = -cos(angle) * speed;
-                    tempShot->velocity.y = -sin(angle) * speed;
-
-                    ajoutShot(tempShot);
-                }
-            }
-
+            createRadialLanes(center, 24, 8, 30.0f, 100.0f, 12, 1);
             bossData->laneTimer = 0.0f;
         }
     }
 }
-// retire un element de la liste des ennemies
-ennemy* retireEnnemy(ennemy* _ennemy)
+
+void bossAttackRemilia(sfRenderWindow* _window, sfVector2f* _pos, BossData* bossData, float _life, float _maxHealth)
 {
-	if (_ennemy == dlEnnemies)
-	{
-		ennemy* tempEnnemy = _ennemy->pNext;
-		dlEnnemies = tempEnnemy;
-		free(_ennemy);
-		return tempEnnemy;
-	}
-	else
-	{
-		ennemy* tempEnnemy = dlEnnemies;
-		while (tempEnnemy->pNext != _ennemy)
-		{
-			tempEnnemy = tempEnnemy->pNext;
-		}
-		tempEnnemy->pNext = _ennemy->pNext;
-		free(_ennemy);
-		return tempEnnemy->pNext;
+    bossData->phaseTimer += getDeltaTime();
+    bossData->attack1Timer += getDeltaTime();
 
-	}
+    sfVector2f center = { _pos->x + 47, _pos->y + 42 };
 
+    // Get player position
+    player* tempPlayer = GetPlayerList();
+    sfVector2f playerPos = { 960, 800 };
+
+    if (tempPlayer != NULL)
+    {
+        playerPos.x = tempPlayer->pos.x + 25;
+        playerPos.y = tempPlayer->pos.y + 25;
+    }
+
+    // Phase 1: Aimed shots + cross pattern (HP > 50%)
+    if (_life > _maxHealth / 2)
+    {
+        // Continuous aimed 3-way spread
+        if (bossData->attack1Timer >= 0.3f)
+        {
+            createAimedSpread(center, playerPos, 3, 0.4f, 180.0f, 8, 1);
+            bossData->attack1Timer = 0.0f;
+        }
+
+        // Red magic cross bursts every 2 seconds
+        bossData->laneTimer += getDeltaTime();
+        if (bossData->laneTimer >= 2.0f)
+        {
+            createCrossPattern(center, 8, 15.0f, 140.0f, 10, 1);
+            bossData->laneTimer = 0.0f;
+        }
+    }
+    // Phase 2: Dense aimed + expanding rings (HP < 50%)
+    else
+    {
+        // Faster aimed shots - 5-way spread
+        if (bossData->attack1Timer >= 0.2f)
+        {
+            createAimedSpread(center, playerPos, 5, 0.6f, 220.0f, 7, 1);
+            bossData->attack1Timer = 0.0f;
+        }
+
+        // Dense expanding rings every 1.5 seconds
+        bossData->laneTimer += getDeltaTime();
+        if (bossData->laneTimer >= 1.5f)
+        {
+            createBulletRing(center, 36, 0.0f, 150.0f, 9, 1);
+            bossData->laneTimer = 0.0f;
+        }
+    }
 }
-int getEnnemyNumber()
+
+void bossAttackRemilia(sfRenderWindow* _window, sfVector2f* _pos, BossData* bossData, float _life, float _maxHealth)
 {
+    bossData->phaseTimer += getDeltaTime();
+    bossData->attack1Timer += getDeltaTime();
 
-	return ennemyNumber;
+    sfVector2f center = { _pos->x + 47, _pos->y + 42 };
 
+    // Get player position
+    player* tempPlayer = GetPlayerList();
+    sfVector2f playerPos = { 960, 800 };
+
+    if (tempPlayer != NULL)
+    {
+        playerPos.x = tempPlayer->pos.x + 25;
+        playerPos.y = tempPlayer->pos.y + 25;
+    }
+
+    // Phase 1: Aimed shots + cross pattern (HP > 50%)
+    if (_life > _maxHealth / 2)
+    {
+        // Continuous aimed 3-way spread
+        if (bossData->attack1Timer >= 0.3f)
+        {
+            createAimedSpread(center, playerPos, 3, 0.4f, 180.0f, 8, 1);
+            bossData->attack1Timer = 0.0f;
+        }
+
+        // Red magic cross bursts every 2 seconds
+        bossData->laneTimer += getDeltaTime();
+        if (bossData->laneTimer >= 2.0f)
+        {
+            createCrossPattern(center, 8, 15.0f, 140.0f, 10, 1);
+            bossData->laneTimer = 0.0f;
+        }
+    }
+    // Phase 2: Dense aimed + expanding rings (HP < 50%)
+    else
+    {
+        // Faster aimed shots - 5-way spread
+        if (bossData->attack1Timer >= 0.2f)
+        {
+            createAimedSpread(center, playerPos, 5, 0.6f, 220.0f, 7, 1);
+            bossData->attack1Timer = 0.0f;
+        }
+
+        // Dense expanding rings every 1.5 seconds
+        bossData->laneTimer += getDeltaTime();
+        if (bossData->laneTimer >= 1.5f)
+        {
+            createBulletRing(center, 36, 0.0f, 150.0f, 9, 1);
+            bossData->laneTimer = 0.0f;
+        }
+    }
 }
-int isActualEnnemyAlive()
+
+void bossAttackFlandre(sfRenderWindow* _window, sfVector2f* _pos, BossData* bossData, float _life, float _maxHealth)
 {
+    bossData->phaseTimer += getDeltaTime();
+    bossData->attack1Timer += getDeltaTime();
 
-	ennemy* tempEnnemy = dlEnnemies;
-	if (tempEnnemy != NULL)
-	{
-		return 1;
-	}
-	return 0;
+    sfVector2f center = { _pos->x + 47, _pos->y + 42 };
 
+    // Phase 1: Chaotic random spread (HP > 50%)
+    if (_life > _maxHealth / 2)
+    {
+        if (bossData->attack1Timer >= 0.15f)
+        {
+            createRandomScatter(center, 8, 100.0f, 250.0f, 12, 1);
+            bossData->attack1Timer = 0.0f;
+        }
+    }
+    // Phase 2: Explosive dense patterns (HP < 50%)
+    else
+    {
+        if (bossData->attack1Timer >= 0.4f)
+        {
+            createOverlappingRings(center, 3, 24, 0.5f, 180.0f, 30.0f, 6, 2, 1);
+            bossData->attack1Timer = 0.0f;
+        }
+    }
 }
-//affiche toutes les particules des groupe des ennemies
+
+void bossAttackYukari(sfRenderWindow* _window, sfVector2f* _pos, BossData* bossData, float _life, float _maxHealth)
+{
+    bossData->phaseTimer += getDeltaTime();
+    bossData->attack1Timer += getDeltaTime();
+
+    sfVector2f center = { _pos->x + 47, _pos->y + 42 };
+
+    // Phase 1: Laser-like dense lanes (HP > 50%)
+    if (_life > _maxHealth / 2)
+    {
+        if (bossData->attack1Timer >= 0.5f)
+        {
+            createRadialLanes(center, 16, 12, 20.0f, 200.0f, 5, 1);
+            bossData->attack1Timer = 0.0f;
+        }
+    }
+    // Phase 2: Random scattered bullets (HP < 50%)
+    else
+    {
+        if (bossData->attack1Timer >= 0.3f)
+        {
+            createRandomScatter(center, 20, 200.0f, 300.0f, 10, 1);
+            bossData->attack1Timer = 0.0f;
+        }
+    }
+}
+
+// ============================================================================
+// UPDATE & MOVEMENT
+// ============================================================================
+
 void updateEnnemy(sfRenderWindow* _window, sfSprite* _sprite)
 {
     ennemy* tempEnnemy = dlEnnemies;
 
     while (tempEnnemy != NULL)
     {
-     
         tempEnnemy->moveTimer += getDeltaTime();
-            switch (tempEnnemy->state)
-            {
-            case STATE_ENTER:
-            {
-                float t = tempEnnemy->moveTimer / tempEnnemy->moveDuration;
-                if (t >= 1.0f)
-                {
-                    t = 1.0f;
-                    tempEnnemy->state = STATE_PATTERN;
-                    tempEnnemy->moveTimer = 0.0f;
-                    tempEnnemy->patternTimer = 0.0f;
-                }
 
-                // Ease in
-                t = easeInOutQuad(t);
-                tempEnnemy->pos = vec2f_lerp(tempEnnemy->startPos, tempEnnemy->targetPos, t);
-                break;
+        switch (tempEnnemy->state)
+        {
+        case STATE_ENTER:
+        {
+            float t = tempEnnemy->moveTimer / tempEnnemy->moveDuration;
+            if (t >= 1.0f)
+            {
+                t = 1.0f;
+                tempEnnemy->state = STATE_PATTERN;
+                tempEnnemy->moveTimer = 0.0f;
+                tempEnnemy->patternTimer = 0.0f;
             }
 
-            case STATE_PATTERN:
+            t = easeInOutQuad(t);
+            tempEnnemy->pos = vec2f_lerp(tempEnnemy->startPos, tempEnnemy->targetPos, t);
+            break;
+        }
+
+        case STATE_PATTERN:
+        {
+            tempEnnemy->patternTimer += getDeltaTime();
+
+            // Wave movement
+            float wave = sin(tempEnnemy->patternTimer * tempEnnemy->waveFrequency) * tempEnnemy->waveAmplitude;
+            tempEnnemy->pos.x = tempEnnemy->targetPos.x + wave;
+
+            // Boss attacks
+            if (tempEnnemy->bossData != NULL)
             {
-                tempEnnemy->patternTimer += getDeltaTime();
+                BossData* bossData = (BossData*)tempEnnemy->bossData;
 
-                // Boss moves side to side smoothly
-                float wave = sin(tempEnnemy->patternTimer * tempEnnemy->waveFrequency) * tempEnnemy->waveAmplitude;
-                tempEnnemy->pos.x = tempEnnemy->targetPos.x + wave;
-
-                // Attack cooldown
+                // Determine which boss based on currentPhase
+                if (bossData->currentPhase == 0) // Junko
+                {
+                    bossAttackJunko(_window, &tempEnnemy->pos, bossData, tempEnnemy->life, tempEnnemy->maxLife);
+                }
+                else if (bossData->currentPhase == 1) // Remilia
+                {
+                    bossAttackRemilia(_window, &tempEnnemy->pos, bossData, tempEnnemy->life, tempEnnemy->maxLife);
+                }
+                // Add Flandre and Yukari here later
+            }
+            else
+            {
+                // Regular enemy attacks
                 tempEnnemy->cooldown += getDeltaTime();
 
-                // Rotating spiral every 0.1 seconds
-                if (tempEnnemy->bossData != NULL)
+                if (tempEnnemy->cooldown >= 1.0f)
                 {
-                    bossAttackPurelyBulletHell(_window, &tempEnnemy->pos, tempEnnemy->bossData, tempEnnemy->life,tempEnnemy->maxLife);
-                }
-                if (tempEnnemy->bossData == NULL && tempEnnemy->cooldown >= 0.1f)
-                {
-                    bossAttackSpiral(_window, &tempEnnemy->pos, tempEnnemy->patternTimer);
+                    prepareEnnemyShot(_window, &tempEnnemy->pos, 12, 8, (sfVector2f) { 47, 42 });
                     tempEnnemy->cooldown = 0.0f;
                 }
-           
-                // Dense ring every 3 seconds
-                static float ringTimer = 0.0f;
-                ringTimer += getDeltaTime();
-                if (tempEnnemy->bossData == NULL && ringTimer >= 3.0f)
-                {
-                    bossAttackExpandingRing(_window, &tempEnnemy->pos);
-                    ringTimer = 0.0f;
-                }
-
-                break;
             }
-        }
-       
-        
-  
-            // Draw
-            sfSprite_setPosition(_sprite, tempEnnemy->pos);
-            sfSprite_setTexture(_sprite, GetTexture("enemy"), sfTrue);
-            sfSprite_setScale(_sprite, (sfVector2f) { tempEnnemy->scale, tempEnnemy->scale });
-            sfRenderWindow_drawSprite(_window, _sprite, NULL);
-        
 
-            tempEnnemy = tempEnnemy->pNext;
-      
+            break;
+        }
+
+        case STATE_EXIT:
+        {
+            // Move off screen
+            float t = tempEnnemy->moveTimer / tempEnnemy->moveDuration;
+            if (t >= 1.0f)
+            {
+                tempEnnemy = retireEnnemy(tempEnnemy);
+                continue;
+            }
+
+            tempEnnemy->pos = vec2f_lerp(tempEnnemy->startPos, tempEnnemy->targetPos, t);
+            break;
+        }
+        }
+
+        // Draw
+        sfSprite_setPosition(_sprite, tempEnnemy->pos);
+        sfSprite_setTexture(_sprite, GetTexture("enemy"), sfTrue);
+        sfSprite_setScale(_sprite, (sfVector2f) { tempEnnemy->scale, tempEnnemy->scale });
+        sfRenderWindow_drawSprite(_window, _sprite, NULL);
+
+        tempEnnemy = tempEnnemy->pNext;
     }
 }
-
-ennemy* GetEnnemyList()
-{
-	return dlEnnemies;
-}
-

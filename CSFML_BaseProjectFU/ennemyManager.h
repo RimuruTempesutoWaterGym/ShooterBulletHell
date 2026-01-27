@@ -17,7 +17,12 @@ typedef enum {
 typedef struct {
     float phaseTimer;
     int currentPhase;
-    float ringTimer;
+    union {
+        float attack1Timer;
+        float attack2Timer;
+        float attack3Timer;
+    };
+
     float laneTimer;
 
 } BossData;
