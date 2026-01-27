@@ -1,7 +1,5 @@
-Here's a cleaned up and reorganized shotManager.c:
-c
 
-// shotManager.c
+
 #include "playerManager.h"
 #include "shotManager.h"
 #include "textureManager.h"
@@ -21,7 +19,7 @@ sfIntRect spellCardRect;
 // ============================================================================
 
 #define PI 3.14159265358979323846f
-#define SHOT_FRICTION 0.05f  // Deceleration factor
+#define SHOT_FRICTION 0.00005f  // Deceleration factor
 
 // ============================================================================
 // INITIALIZATION

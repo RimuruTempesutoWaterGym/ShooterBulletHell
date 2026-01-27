@@ -34,6 +34,7 @@ float startTimer;
 
 
 float timer;
+WaveManager waveManager;
 int nbreJoueur;
 int waveCount;
 

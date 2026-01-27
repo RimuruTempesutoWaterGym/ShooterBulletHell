@@ -48,7 +48,7 @@ struct ennemy {
     float waveFrequency;
 
     // Boss-specific data
-    void* bossData;  // Points to JunkoBossData for Junko
+    BossData* bossData;
 
     struct ennemy* pNext;
 } ;

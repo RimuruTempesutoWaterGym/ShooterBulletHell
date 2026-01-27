@@ -9,10 +9,10 @@ typedef enum {
 } SpawnType;
 typedef enum {
     BOSS_TYPE_NONE,
-    BOSS_TYPE_1,
-    BOSS_TYPE_2,
-    BOSS_TYPE_3,
-    BOSS_TYPE_4,
+    BOSS_TYPE_YUKARI,
+    BOSS_TYPE_REMILIA,
+    BOSS_TYPE_JUNKO,
+    BOSS_TYPE_FLANDRE,
 } BossType;
 typedef enum {
     MINION_TYPE_BASIC,

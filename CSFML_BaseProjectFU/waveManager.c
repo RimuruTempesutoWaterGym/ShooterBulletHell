@@ -170,16 +170,16 @@ void updateWaveManager(WaveManager* manager, sfRenderWindow* window)
                 // Spawn different boss types
                 switch (event->bossType)
                 {
-                case BOSS_TYPE_1:
+                case BOSS_TYPE_JUNKO:
                     prepareJunkoBoss(window);
                     break;
-                case BOSS_TYPE_2:
+                case BOSS_TYPE_REMILIA:
                     prepareRemiliaBoss(window);
                     break;
-                case BOSS_TYPE_3:
+                case BOSS_TYPE_FLANDRE:
                     prepareFlandreBoss(window);
                     break;
-                case BOSS_TYPE_4:
+                case BOSS_TYPE_YUKARI:
                     prepareYukariBoss(window);
                     break;
                 }

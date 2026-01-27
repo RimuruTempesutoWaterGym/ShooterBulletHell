@@ -407,60 +407,7 @@ void bossAttackJunko(sfRenderWindow* _window, sfVector2f* _pos, BossData* bossDa
     }
 }
 
-void bossAttackRemilia(sfRenderWindow* _window, sfVector2f* _pos, BossData* bossData, float _life, float _maxHealth)
-{
-    bossData->phaseTimer += getDeltaTime();
-    bossData->attack1Timer += getDeltaTime();
 
-    sfVector2f center = { _pos->x + 47, _pos->y + 42 };
-
-    // Get player position
-    player* tempPlayer = GetPlayerList();
-    sfVector2f playerPos = { 960, 800 };
-
-    if (tempPlayer != NULL)
-    {
-        playerPos.x = tempPlayer->pos.x + 25;
-        playerPos.y = tempPlayer->pos.y + 25;
-    }
-
-    // Phase 1: Aimed shots + cross pattern (HP > 50%)
-    if (_life > _maxHealth / 2)
-    {
-        // Continuous aimed 3-way spread
-        if (bossData->attack1Timer >= 0.3f)
-        {
-            createAimedSpread(center, playerPos, 3, 0.4f, 180.0f, 8, 1);
-            bossData->attack1Timer = 0.0f;
-        }
-
-        // Red magic cross bursts every 2 seconds
-        bossData->laneTimer += getDeltaTime();
-        if (bossData->laneTimer >= 2.0f)
-        {
-            createCrossPattern(center, 8, 15.0f, 140.0f, 10, 1);
-            bossData->laneTimer = 0.0f;
-        }
-    }
-    // Phase 2: Dense aimed + expanding rings (HP < 50%)
-    else
-    {
-        // Faster aimed shots - 5-way spread
-        if (bossData->attack1Timer >= 0.2f)
-        {
-            createAimedSpread(center, playerPos, 5, 0.6f, 220.0f, 7, 1);
-            bossData->attack1Timer = 0.0f;
-        }
-
-        // Dense expanding rings every 1.5 seconds
-        bossData->laneTimer += getDeltaTime();
-        if (bossData->laneTimer >= 1.5f)
-        {
-            createBulletRing(center, 36, 0.0f, 150.0f, 9, 1);
-            bossData->laneTimer = 0.0f;
-        }
-    }
-}
 
 void bossAttackRemilia(sfRenderWindow* _window, sfVector2f* _pos, BossData* bossData, float _life, float _maxHealth)
 {
