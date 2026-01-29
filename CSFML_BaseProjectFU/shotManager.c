@@ -640,8 +640,7 @@ void updateShot(sfRenderWindow* _window)
 
                     if (tempShot->hasHit == sfFalse)
                     {
-                        printf("coupe");
-                        tempEnnemy->life-= tempShot->damage;
+                         tempEnnemy->life-= tempShot->damage;
                         tempShot->hasHit = sfTrue;
                     }
                 }

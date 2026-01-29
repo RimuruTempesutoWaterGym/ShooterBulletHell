@@ -11,7 +11,9 @@ font big ../Ressources/Fonts/full_Pack_2025.ttf
 [game]
 animation patchuliAnim ../Ressources/Textures/patchuli.anim
 single enemy ../Ressources/Textures/enemyGreen1.png
-single BG ../Ressources/Textures/backgrouns/SeaWavesB_N.png
+single eiki ../Ressources/Textures/eikiShiki.png
+single utsuho ../Ressources/Textures/utsuho.png
+single bg ../Ressources/Textures/backgrounds/SeaWavesBN.png
 single enemy2 ../Ressources/Textures/enemyRed3.png
 single boss ../Ressources/Textures/ufoRed.png
 single shot ../Ressources/Textures/Danmaku/shot.png
