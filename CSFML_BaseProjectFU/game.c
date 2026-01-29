@@ -68,8 +68,8 @@ void initGame(Window* _window)
 	spHitboxPlayer = sfCircleShape_create();
 	initWaveManager(&waveManager);
 	startWave(&waveManager, 1);
-	sfSprite_setTexture(spBG1, GetTexture("BG"), sfTrue);
-	sfSprite_setTexture(spBG2, GetTexture("BG"), sfTrue);
+	sfSprite_setTexture(spBG1, GetTexture("bg"), sfTrue);
+	sfSprite_setTexture(spBG2, GetTexture("bg"), sfTrue);
 
 	sfSprite_setPosition(spBG2, vector2f(0.0f, -1080.0f));
 	
@@ -85,7 +85,7 @@ void initGame(Window* _window)
 	
 	GamepadDetection();
 
-	Sleep(2000); // A enlever juste pour le test Thread
+
 
 	w.state = sfTrue;
 
@@ -93,12 +93,14 @@ void initGame(Window* _window)
 
 void updateGame(Window* _window)
 {
+	if (!isPaused)
+	{
 		timer += getDeltaTime();
 
 
-		
+
 		updateWaveManager(&waveManager, _window->renderWindow);
-	
+
 		if (!waveManager.waveActive && !isActualEnnemyAlive())
 		{
 			static float nextWaveDelay = 0.0f;
@@ -135,8 +137,8 @@ void updateGame(Window* _window)
 		{
 			if (isConnected(i))
 			{
-					timer = 0.0f;
-			
+				timer = 0.0f;
+
 			}
 		}
 
@@ -152,20 +154,24 @@ void updateGame(Window* _window)
 
 		sfSprite_setPosition(spBG1, BG1Pos);
 		sfSprite_setPosition(spBG2, BG2Pos);
-		
-		sfSprite_setColor(spBG1, sfRed);
-		sfSprite_setColor(spBG2, sfBlue);
+		updateEnnemy(_window->renderWindow);
+		updatePlayer(_window->renderWindow);
+		updateShot(_window->renderWindow);
+		updateParticle(_window->renderWindow);
+	}
 }
 
 void displayGame(Window* _window)
 {
 	sfRenderWindow_drawSprite(_window->renderWindow, spBG1, NULL);
-	
-	sfRenderWindow_drawSprite(_window->renderWindow, spBG2, NULL); 
-	updateEnnemy(_window->renderWindow, spEnnemy);
-	updatePlayer(_window->renderWindow, spPlayer, spHitboxPlayer);
-	updateShot(_window->renderWindow, spShot);
-	updateParticle(_window->renderWindow, spParticle);
+
+	sfRenderWindow_drawSprite(_window->renderWindow, spBG2, NULL);
+	DisplayEnnemy(_window->renderWindow, spEnnemy);
+	DisplayPlayer(_window->renderWindow, spPlayer, spHitboxPlayer);
+	DisplayShot(_window->renderWindow, spShot);
+	DisplayParticle(_window->renderWindow, spParticle);
+
+
 }
 	
 void deinitGame()

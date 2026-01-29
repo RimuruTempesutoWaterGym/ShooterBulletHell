@@ -128,11 +128,11 @@ void prepareFastEnnemy(sfRenderWindow* _window)
 {
     ennemyNumber++;
     ennemy* tempEnnemy = (ennemy*)calloc(1, sizeof(ennemy));
-
-    tempEnnemy->life = 1;
-    tempEnnemy->maxLife = 1;
+    tempEnnemy->maxLife = 15;
+    tempEnnemy->life = tempEnnemy->maxLife;
     tempEnnemy->scale = 0.8f;
     tempEnnemy->cooldown = 0;
+    tempEnnemy->pointValue = 2000;
     tempEnnemy->bossData = NULL;
 
     tempEnnemy->state = STATE_ENTER;
@@ -155,10 +155,11 @@ void prepareTankEnnemy(sfRenderWindow* _window)
     ennemyNumber++;
     ennemy* tempEnnemy = (ennemy*)calloc(1, sizeof(ennemy));
 
-    tempEnnemy->life = 10;
-    tempEnnemy->maxLife = 10;
+    tempEnnemy->maxLife = 40;
+    tempEnnemy->life = tempEnnemy->maxLife;
     tempEnnemy->scale = 1.5f;
     tempEnnemy->cooldown = 0;
+    tempEnnemy->pointValue = 3000;
     tempEnnemy->bossData = NULL;
 
     tempEnnemy->state = STATE_ENTER;
@@ -181,10 +182,11 @@ void prepareShooterEnnemy(sfRenderWindow* _window)
     ennemyNumber++;
     ennemy* tempEnnemy = (ennemy*)calloc(1, sizeof(ennemy));
 
-    tempEnnemy->life = 3;
-    tempEnnemy->maxLife = 3;
+    tempEnnemy->maxLife = 25;
+    tempEnnemy->life = tempEnnemy->maxLife;
     tempEnnemy->scale = 1.0f;
     tempEnnemy->cooldown = 0;
+    tempEnnemy->pointValue = 1500;
     tempEnnemy->bossData = NULL;
 
     tempEnnemy->state = STATE_ENTER;
@@ -212,10 +214,11 @@ void prepareJunkoBoss(sfRenderWindow* _window)
     ennemy* tempEnnemy = (ennemy*)calloc(1, sizeof(ennemy));
 
     // Junko's stats
-    tempEnnemy->life = 200;
-    tempEnnemy->maxLife = 200;
+    tempEnnemy->maxLife = 1500;
+    tempEnnemy->life = tempEnnemy->maxLife;
     tempEnnemy->scale = 2.5f;
     tempEnnemy->cooldown = 0;
+    tempEnnemy->pointValue = 1500000;
 
     // Movement
     tempEnnemy->state = STATE_ENTER;
@@ -237,6 +240,7 @@ void prepareJunkoBoss(sfRenderWindow* _window)
     bossData->currentPhase = 0;
     bossData->attack1Timer = 0.0f;
     bossData->laneTimer = 0.0f;
+    bossData->entityBoss = BOSS_TYPE_JUNKO;
 
     tempEnnemy->bossData = bossData;
 
@@ -249,10 +253,11 @@ void prepareRemiliaBoss(sfRenderWindow* _window)
     ennemy* tempEnnemy = (ennemy*)calloc(1, sizeof(ennemy));
 
     // Remilia's stats
-    tempEnnemy->life = 150;
-    tempEnnemy->maxLife = 150;
+    tempEnnemy->maxLife = 2500;
+    tempEnnemy->life = tempEnnemy->maxLife;
     tempEnnemy->scale = 2.5f;
     tempEnnemy->cooldown = 0;
+    tempEnnemy->pointValue =3050000;
 
     // Movement
     tempEnnemy->state = STATE_ENTER;
@@ -274,6 +279,7 @@ void prepareRemiliaBoss(sfRenderWindow* _window)
     bossData->currentPhase = 1; // Different phase ID for Remilia
     bossData->attack1Timer = 0.0f;
     bossData->laneTimer = 0.0f;
+    bossData->entityBoss = BOSS_TYPE_REMILIA;
 
     tempEnnemy->bossData = bossData;
 
@@ -285,10 +291,11 @@ void prepareFlandreBoss(sfRenderWindow* _window)
     ennemyNumber++;
     ennemy* tempEnnemy = (ennemy*)calloc(1, sizeof(ennemy));
 
-    tempEnnemy->life = 180;
-    tempEnnemy->maxLife = 180;
+    tempEnnemy->maxLife = 2000;
+    tempEnnemy->life = tempEnnemy->maxLife;
     tempEnnemy->scale = 2.3f;
     tempEnnemy->cooldown = 0;
+    tempEnnemy->pointValue = 2300000;
 
     tempEnnemy->state = STATE_ENTER;
     tempEnnemy->startPos = (sfVector2f){ 960, -200 };
@@ -307,6 +314,7 @@ void prepareFlandreBoss(sfRenderWindow* _window)
     bossData->currentPhase = 2;
     bossData->attack1Timer = 0.0f;
     bossData->laneTimer = 0.0f;
+    bossData->entityBoss = BOSS_TYPE_FLANDRE;
 
     tempEnnemy->bossData = bossData;
 
@@ -318,10 +326,11 @@ void prepareYukariBoss(sfRenderWindow* _window)
     ennemyNumber++;
     ennemy* tempEnnemy = (ennemy*)calloc(1, sizeof(ennemy));
 
-    tempEnnemy->life = 250;
-    tempEnnemy->maxLife = 250;
+    tempEnnemy->maxLife = 6666;
+    tempEnnemy->life = tempEnnemy->maxLife;
     tempEnnemy->scale = 2.7f;
     tempEnnemy->cooldown = 0;
+    tempEnnemy->pointValue = 5600000;
 
     tempEnnemy->state = STATE_ENTER;
     tempEnnemy->startPos = (sfVector2f){ 960, -200 };
@@ -340,6 +349,7 @@ void prepareYukariBoss(sfRenderWindow* _window)
     bossData->currentPhase = 3;
     bossData->attack1Timer = 0.0f;
     bossData->laneTimer = 0.0f;
+    bossData->entityBoss = BOSS_TYPE_YUKARI;
 
     tempEnnemy->bossData = bossData;
 
@@ -522,7 +532,7 @@ void bossAttackYukari(sfRenderWindow* _window, sfVector2f* _pos, BossData* bossD
 // UPDATE & MOVEMENT
 // ============================================================================
 
-void updateEnnemy(sfRenderWindow* _window, sfSprite* _sprite)
+void updateEnnemy(sfRenderWindow* _window)
 {
     ennemy* tempEnnemy = dlEnnemies;
 
@@ -602,12 +612,39 @@ void updateEnnemy(sfRenderWindow* _window, sfSprite* _sprite)
         }
         }
 
+
+
+      
+
+        tempEnnemy = tempEnnemy->pNext;
+    }
+}
+void DisplayEnnemy(sfRenderWindow* _window, sfSprite* _sprite)
+{
+    ennemy* tempEnnemy = dlEnnemies;
+
+    while (tempEnnemy != NULL)
+    {
         // Draw
         sfSprite_setPosition(_sprite, tempEnnemy->pos);
-        sfSprite_setTexture(_sprite, GetTexture("enemy"), sfTrue);
+        if (tempEnnemy->bossData != NULL)
+        {
+            switch (tempEnnemy->bossData->entityBoss)
+            {
+            case 3:
+                sfSprite_setTexture(_sprite, GetTexture("eiki"), sfTrue);
+                break;
+            case 2:
+                sfSprite_setTexture(_sprite, GetTexture("utsuho"), sfTrue);
+                break;
+            }
+        }
+        else
+        {
+            sfSprite_setTexture(_sprite, GetTexture("enemy"), sfTrue);
+        }
         sfSprite_setScale(_sprite, (sfVector2f) { tempEnnemy->scale, tempEnnemy->scale });
         sfRenderWindow_drawSprite(_window, _sprite, NULL);
-
         tempEnnemy = tempEnnemy->pNext;
     }
 }

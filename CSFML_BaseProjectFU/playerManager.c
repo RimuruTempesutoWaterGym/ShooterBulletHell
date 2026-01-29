@@ -11,6 +11,7 @@ float timerUlt = 0;
 int spriteFrame = 0;
 player* dlPlayers = 0;
 sfIntRect  patchuliRect;
+int  standMode;
 
 // cr�� un �l�ment de la liste des joueurs
 
@@ -70,7 +71,7 @@ player* retirePlayer(player* _player)
 }
 
 //affiche toutes les particules des groupe des ennemies
-void updatePlayer(sfRenderWindow* _window, sfSprite* _sprite, sfCircleShape* _hitPoint)
+void updatePlayer(sfRenderWindow* _window)
 {
 
 	timerBall += getDeltaTime();
@@ -88,14 +89,13 @@ void updatePlayer(sfRenderWindow* _window, sfSprite* _sprite, sfCircleShape* _hi
 	}
 		
 		MovementPlayer(tempPlayer);
-		sfSprite_setPosition(_sprite, tempPlayer->pos);
-		sfSprite_setTexture(_sprite, GetTexture("patchuli"), sfTrue);
+
 		spriteFrame = (int){ timerSprite / GetFrameTime("patchuli") } % GetNbFrame("patchuli");
 		patchuliRect.left = patchuliRect.width * spriteFrame;
 
-		sfSprite_setTextureRect(_sprite, patchuliRect);
 
-		sfRenderWindow_drawSprite(_window, _sprite, NULL);
+
+	
 		if ( sfKeyboard_isKeyPressed(sfKeyF) && tempPlayer->spellCard > 0 && timerUlt > 2.f )
 		{
 
@@ -105,18 +105,15 @@ void updatePlayer(sfRenderWindow* _window, sfSprite* _sprite, sfCircleShape* _hi
 		}
 		if (sfKeyboard_isKeyPressed(sfKeyC) )
 		{
-
+			standMode = 1;
 			tempPlayer->velocity.y = 200;
 			tempPlayer->velocity.x = 200;
-	
-			sfCircleShape_setTexture(_hitPoint, GetTexture("hitbox"), NULL);
-			sfCircleShape_setOrigin(_hitPoint, (sfVector2f) { tempPlayer->scale, tempPlayer->scale  });
-			sfCircleShape_setPosition(_hitPoint, (sfVector2f) { tempPlayer->pos.x + patchuliRect.width / 2, tempPlayer->pos.y + patchuliRect.height / 2 });
-			sfCircleShape_setRadius(_hitPoint, tempPlayer->scale);
-			sfRenderWindow_drawSprite(_window, _hitPoint, NULL);
+
+
 		}
 		else
 		{
+			standMode = 0;
 			tempPlayer->velocity.y = 500;
 			tempPlayer->velocity.x = 500;
 		}
@@ -127,6 +124,27 @@ void updatePlayer(sfRenderWindow* _window, sfSprite* _sprite, sfCircleShape* _hi
 
 
 }
+void DisplayPlayer(sfRenderWindow* _window, sfSprite* _sprite, sfCircleShape* _hitPoint)
+{
+	player* tempPlayer = dlPlayers;
+
+	while (tempPlayer != NULL)
+	{
+		sfSprite_setPosition(_sprite, tempPlayer->pos);
+		sfSprite_setTexture(_sprite, GetTexture("patchuli"), sfTrue);
+		sfSprite_setTextureRect(_sprite, patchuliRect);
+		sfCircleShape_setTexture(_hitPoint, GetTexture("hitbox"), NULL);
+		sfCircleShape_setOrigin(_hitPoint, (sfVector2f) { tempPlayer->scale, tempPlayer->scale });
+		sfCircleShape_setPosition(_hitPoint, (sfVector2f) { tempPlayer->pos.x + patchuliRect.width / 2, tempPlayer->pos.y + patchuliRect.height / 2 });
+		sfCircleShape_setRadius(_hitPoint, tempPlayer->scale);
+		sfRenderWindow_drawSprite(_window, _sprite, NULL);
+		if (standMode == 1)
+		{
+			sfRenderWindow_drawSprite(_window, _hitPoint, NULL);
+		}
+			tempPlayer = tempPlayer->pNext;
+		}
+	}
 void MovementPlayer(player* _player)
 {
 	if(sfKeyboard_isKeyPressed(sfKeyD) && _player->pos.x < 1870)

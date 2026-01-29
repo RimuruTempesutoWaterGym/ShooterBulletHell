@@ -1,5 +1,6 @@
 #pragma once
 #include "tools.h"
+#include "waveManager.h"
 // liste d'ennemies
 typedef enum {
 	STATE_ENTER,      // Lerp to position
@@ -17,6 +18,8 @@ typedef enum {
 typedef struct {
     float phaseTimer;
     int currentPhase;
+     BossType entityBoss;
+    int entity;
     union {
         float attack1Timer;
         float attack2Timer;
@@ -34,6 +37,7 @@ struct ennemy {
     float maxLife;
     float scale;
     float cooldown;
+    float pointValue;
 
     // Lerp movement
     EnnemyState state;
@@ -55,7 +59,8 @@ struct ennemy {
 
 void prepareEnnemy(sfRenderWindow* _window);
 void ajoutEnnemy(ennemy* _ennemy);
-void updateEnnemy(sfRenderWindow* _window, sfSprite* _sprite);
+void updateEnnemy(sfRenderWindow* _window);
+void DisplayEnnemy(sfRenderWindow* _window, sfSprite* _sprite);
 ennemy* retireEnnemy(ennemy* _ennemy);
 void initEnnemy();
 ennemy* GetEnnemyList();

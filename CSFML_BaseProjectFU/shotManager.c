@@ -75,6 +75,7 @@ void preparePlayerShot(sfRenderWindow* _window, sfVector2f* _pos)
         tempShot->shooter = ally;
         tempShot->typeShot = normalShot;
         tempShot->life = 1;
+        tempShot->damage = 1;
         tempShot->scale = 5;
         tempShot->pos.x = _pos->x + (i * 10) + 5;
         tempShot->pos.y = _pos->y;
@@ -89,7 +90,7 @@ void preparePlayerShot(sfRenderWindow* _window, sfVector2f* _pos)
 
 void prepareSpellCardShot(sfRenderWindow* _window, sfVector2f* _pos, int _nbShot, int _scale, sfVector2f _centering)
 {
-    prepareCircleShot(_window, _pos, _nbShot, _scale, 3, _centering, ally, SpellCardShot);
+    prepareCircleShot(_window, _pos, _nbShot, _scale, 300, _centering, ally, SpellCardShot);
 }
 
 // ============================================================================
@@ -592,7 +593,7 @@ void bossAttackAimedBurst(sfRenderWindow* _window, sfVector2f* _bossPos, sfVecto
 // UPDATE & COLLISION DETECTION
 // ============================================================================
 
-void updateShot(sfRenderWindow* _window, sfCircleShape* _shot)
+void updateShot(sfRenderWindow* _window)
 {
     shot* tempShot = dlShot;
 
@@ -605,6 +606,7 @@ void updateShot(sfRenderWindow* _window, sfCircleShape* _shot)
             if (tempShot->hitTimer >= 3.0f)
             {
                 tempShot->hasHit = sfFalse;
+                tempShot->hitTimer = 0.f;
             }
         }
 
@@ -612,13 +614,24 @@ void updateShot(sfRenderWindow* _window, sfCircleShape* _shot)
         if (tempShot->shooter != opponent)
         {
             ennemy* tempEnnemy = GetEnnemyList();
-            sfCircleShape_setPosition(_shot, tempShot->pos);
+
 
             while (tempEnnemy != NULL)
             {
-                sfFloatRect enemyRect = { tempEnnemy->pos.x, tempEnnemy->pos.y, 93, 84 };
+                sfFloatRect ballRect = { tempShot->pos.x, tempShot->pos.y,tempShot->scale,tempShot->scale };
+                sfFloatRect enemyRect = { tempEnnemy->pos.x, tempEnnemy->pos.y };
+                if (tempEnnemy->bossData != NULL)
+                {
+                    enemyRect.height = 100 * tempEnnemy->scale;
+                    enemyRect.width = 50 * tempEnnemy->scale;
+                }
+                else
+                {
+                    enemyRect.height = 84 * tempEnnemy->scale;
+                    enemyRect.width = 93 * tempEnnemy->scale;
 
-                if (Rectangle_Collision(sfCircleShape_getGlobalBounds(_shot), enemyRect))
+                }
+                if (Rectangle_Collision(ballRect, enemyRect))
                 {
                     if (tempShot->typeShot != SpellCardShot)
                     {
@@ -627,7 +640,8 @@ void updateShot(sfRenderWindow* _window, sfCircleShape* _shot)
 
                     if (tempShot->hasHit == sfFalse)
                     {
-                        tempEnnemy->life--;
+                        printf("coupe");
+                        tempEnnemy->life-= tempShot->damage;
                         tempShot->hasHit = sfTrue;
                     }
                 }
@@ -677,15 +691,43 @@ void updateShot(sfRenderWindow* _window, sfCircleShape* _shot)
                 {
                     if (tempShot->hasHit == sfFalse)
                     {
+                  
                         tempPlayer->lifeForce -= tempShot->damage;
                         tempShot->hasHit = sfTrue;
+
                     }
                 }
 
                 tempPlayer = tempPlayer->pNext;
             }
         }
+        if (tempShot->life < 1 ||
+            tempShot->pos.y < -100 || tempShot->pos.y > 1200 ||
+            tempShot->pos.x < -100 || tempShot->pos.x > 2100)
+        {
+            tempShot = retireShot(tempShot);
+        }
+        else
+        {
+            // Update position
+            tempShot->pos.x -= tempShot->velocity.x * getDeltaTime();
+            tempShot->pos.y -= tempShot->velocity.y * getDeltaTime();
 
+            // Apply friction (gradual slowdown)
+            tempShot->velocity.x -= tempShot->velocity.x * SHOT_FRICTION;
+            tempShot->velocity.y -= tempShot->velocity.y * SHOT_FRICTION;
+
+            tempShot = tempShot->pNext;
+        }
+    }
+}
+void DisplayShot(sfRenderWindow* _window, sfCircleShape* _shot)
+{
+    shot* tempShot = dlShot;
+
+    while (tempShot != NULL)
+    {
+        sfCircleShape_setPosition(_shot, tempShot->pos);
         // === SET TEXTURE ===
         if (tempShot->shooter != ally)
         {
@@ -705,21 +747,6 @@ void updateShot(sfRenderWindow* _window, sfCircleShape* _shot)
         }
 
         // === CHECK IF SHOT SHOULD BE REMOVED ===
-        if (tempShot->life < 1 ||
-            tempShot->pos.y < -100 || tempShot->pos.y > 1200 ||
-            tempShot->pos.x < -100 || tempShot->pos.x > 2100)
-        {
-            tempShot = retireShot(tempShot);
-        }
-        else
-        {
-            // Update position
-            tempShot->pos.x -= tempShot->velocity.x * getDeltaTime();
-            tempShot->pos.y -= tempShot->velocity.y * getDeltaTime();
-
-            // Apply friction (gradual slowdown)
-            tempShot->velocity.x -= tempShot->velocity.x * SHOT_FRICTION;
-            tempShot->velocity.y -= tempShot->velocity.y * SHOT_FRICTION;
 
             // Draw
             sfCircleShape_setRadius(_shot, tempShot->scale);
@@ -727,6 +754,6 @@ void updateShot(sfRenderWindow* _window, sfCircleShape* _shot)
             sfRenderWindow_drawCircleShape(_window, _shot, NULL);
 
             tempShot = tempShot->pNext;
-        }
+        
     }
 }

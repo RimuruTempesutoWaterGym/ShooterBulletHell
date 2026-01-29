@@ -51,6 +51,7 @@ void createBulletSpiral(sfVector2f center, int streamCount, int bulletsPerStream
 void createCrossPattern(sfVector2f center, int bulletsPerArm, float armSpacing, float speed, int scale, int damage);
 void createRandomScatter(sfVector2f center, int bulletCount, float minSpeed, float maxSpeed, int scale, int damage);
 void createOverlappingRings(sfVector2f center, int ringCount, int bulletsPerRing, float ringOffset, float speedStart, float speedDecay, int scaleStart, int scaleGrowth, int damage);
-void updateShot(sfRenderWindow* _window, sfCircleShape* _circle);
+void updateShot(sfRenderWindow* _window);
+void DisplayShot(sfRenderWindow* _window, sfCircleShape* _circle);
 shot* retireShot(shot* _shot);
 void initShot();

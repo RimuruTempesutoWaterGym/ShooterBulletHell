@@ -31,7 +31,8 @@ void prepareParticleGroup(sfRenderWindow* _window, int nbParticles, sfVector2f _
 void prepareParticle(sfRenderWindow* _window, particleGroup* _particleGroup, sfVector2f _pos, int _rangeY, int _rangeX);
 void ajoutParticle(particleGroup* _particleGroup, particle* _particle);
 void ajoutParticleGroup(particleGroup* _particleGroup);
-void updateParticle(sfRenderWindow* _window, sfCircleShape* _circle);
+void updateParticle(sfRenderWindow* _window);
+void DisplayParticle(sfRenderWindow* _window, sfCircleShape* _circle);
 particleGroup* retireParticleGroup(particleGroup* _particleGroup);
 particle* retireParticle(particle* _particle, particleGroup* _particleGroup);
 void initParticle();

@@ -109,7 +109,7 @@ particleGroup* retireParticleGroup(particleGroup* _particleGroup)
 
 }
 //affiche toutes les particules des groupe de particules
-void updateParticle(sfRenderWindow* _window, sfCircleShape* _circle)
+void updateParticle(sfRenderWindow* _window)
 {
 
 	particleGroup* tempParticleGroup = dlParticleGroup;
@@ -133,17 +133,7 @@ void updateParticle(sfRenderWindow* _window, sfCircleShape* _circle)
 
 					}
 					particlesRect.left = tempParticle->color * particlesRect.width;
-			
-					sfCircleShape_setPosition(_circle, tempParticle->pos);
-					sfCircleShape_setOrigin(_circle, (sfVector2f) { (float) { tempParticle->scale }, (float) { tempParticle->scale } });
-					sfCircleShape_setTexture(_circle, GetTexture("particles"), NULL);
-					particlesRect.left = tempParticle->color * particlesRect.width;
-					sfCircleShape_setTextureRect(_circle, particlesRect);
 
-					sfCircleShape_setFillColor(_circle, (sfColor){255,255,255, tempParticle->fadeValue});
-					sfCircleShape_setRadius(_circle, tempParticle->scale);
-					sfRenderWindow_drawCircleShape(_window, _circle, sfFalse);
-	
 					tempParticle->pos.x += tempParticle->velocity.x * getDeltaTime();
 					tempParticle->pos.y += tempParticle->velocity.y * getDeltaTime();
 					tempParticle = tempParticle->pNext;
@@ -164,5 +154,31 @@ void updateParticle(sfRenderWindow* _window, sfCircleShape* _circle)
 			tempParticleGroup = retireParticleGroup(tempParticleGroup);
 
 		}
+	}
+}
+void DisplayParticle(sfRenderWindow* _window, sfCircleShape* _circle)
+{
+	particleGroup* tempParticleGroup = dlParticleGroup;
+
+	while (tempParticleGroup != NULL)
+	{
+
+		particle* tempParticle = tempParticleGroup->particlesLast;
+
+		while (tempParticle != NULL)
+		{
+			sfCircleShape_setPosition(_circle, tempParticle->pos);
+			sfCircleShape_setOrigin(_circle, (sfVector2f) { (float) { tempParticle->scale }, (float) { tempParticle->scale } });
+			sfCircleShape_setTexture(_circle, GetTexture("particles"), NULL);
+			particlesRect.left = tempParticle->color * particlesRect.width;
+			sfCircleShape_setTextureRect(_circle, particlesRect);
+
+			sfCircleShape_setFillColor(_circle, (sfColor) { 255, 255, 255, tempParticle->fadeValue });
+			sfCircleShape_setRadius(_circle, tempParticle->scale);
+			sfRenderWindow_drawCircleShape(_window, _circle, sfFalse);
+
+			tempParticle = tempParticle->pNext;
+		}
+		tempParticleGroup = tempParticleGroup->pNext;
 	}
 }
