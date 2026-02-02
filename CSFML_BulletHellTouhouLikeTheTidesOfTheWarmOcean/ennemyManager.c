@@ -212,7 +212,7 @@ void prepareShooterEnnemy(sfRenderWindow* _window)
 // BOSS SPAWNING
 // ============================================================================
 
-void prepareJunkoBoss(sfRenderWindow* _window)
+void prepareEikiBoss(sfRenderWindow* _window)
 {
     ennemyNumber++;
     ennemy* tempEnnemy = (ennemy*)calloc(1, sizeof(ennemy));
@@ -244,14 +244,14 @@ void prepareJunkoBoss(sfRenderWindow* _window)
     bossData->currentPhase = 0;
     bossData->attack1Timer = 0.0f;
     bossData->laneTimer = 0.0f;
-    bossData->entityBoss = BOSS_TYPE_REMILIA;
+    bossData->entityBoss = BOSS_TYPE_EIKI;
 
     tempEnnemy->bossData = bossData;
 
     ajoutEnnemy(tempEnnemy);
 }
 
-void prepareRemiliaBoss(sfRenderWindow* _window)
+void prepareUtsuhoBoss(sfRenderWindow* _window)
 {
     ennemyNumber++;
     ennemy* tempEnnemy = (ennemy*)calloc(1, sizeof(ennemy));
@@ -283,14 +283,14 @@ void prepareRemiliaBoss(sfRenderWindow* _window)
     bossData->currentPhase = 1; // Different phase ID for Remilia
     bossData->attack1Timer = 0.0f;
     bossData->laneTimer = 0.0f;
-    bossData->entityBoss = BOSS_TYPE_REMILIA;
+    bossData->entityBoss = BOSS_TYPE_UTSUHO;
 
     tempEnnemy->bossData = bossData;
 
     ajoutEnnemy(tempEnnemy);
 }
 
-void prepareFlandreBoss(sfRenderWindow* _window)
+void prepareEikiv2Boss(sfRenderWindow* _window)
 {
     ennemyNumber++;
     ennemy* tempEnnemy = (ennemy*)calloc(1, sizeof(ennemy));
@@ -318,14 +318,14 @@ void prepareFlandreBoss(sfRenderWindow* _window)
     bossData->currentPhase = 2;
     bossData->attack1Timer = 0.0f;
     bossData->laneTimer = 0.0f;
-    bossData->entityBoss = BOSS_TYPE_REMILIAV2;
+    bossData->entityBoss = BOSS_TYPE_EIKIV2;
 
     tempEnnemy->bossData = bossData;
 
     ajoutEnnemy(tempEnnemy);
 }
 
-void prepareYukariBoss(sfRenderWindow* _window)
+void prepareUtsuhov2Boss(sfRenderWindow* _window)
 {
     ennemyNumber++;
     ennemy* tempEnnemy = (ennemy*)calloc(1, sizeof(ennemy));
@@ -353,7 +353,7 @@ void prepareYukariBoss(sfRenderWindow* _window)
     bossData->currentPhase = 3;
     bossData->attack1Timer = 0.0f;
     bossData->laneTimer = 0.0f;
-    bossData->entityBoss = BOSS_TYPE_JUNKOV2;
+    bossData->entityBoss = BOSS_TYPE_UTSUHOV2;
 
     tempEnnemy->bossData = bossData;
 
@@ -641,7 +641,7 @@ void updateEnnemy(sfRenderWindow* _window)
                 BossData* bossData = (BossData*)tempEnnemy->bossData;
 
                 // Determine which boss based on currentPhase
-                if (bossData->currentPhase == 1) // Eiki
+                if (bossData->currentPhase == 0) // Eiki
                 {
                     bossAttackEiki(_window, &tempEnnemy->pos, bossData, tempEnnemy->life, tempEnnemy->maxLife);
                 }
@@ -649,7 +649,7 @@ void updateEnnemy(sfRenderWindow* _window)
                 {
                     bossAttackUtsuho(_window, &tempEnnemy->pos, bossData, tempEnnemy->life, tempEnnemy->maxLife);
                 }
-                else if (bossData->currentPhase == 0) // EikiV2
+                else if (bossData->currentPhase == 2) // EikiV2
                 {
                     bossAttackEikiV2(_window, &tempEnnemy->pos, bossData, tempEnnemy->life, tempEnnemy->maxLife);
                 }

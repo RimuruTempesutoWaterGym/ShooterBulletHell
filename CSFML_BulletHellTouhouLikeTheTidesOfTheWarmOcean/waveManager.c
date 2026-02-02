@@ -168,20 +168,20 @@ void updateWaveManager(WaveManager* manager, sfRenderWindow* window)
         {
             if (manager->spawnedCount == 0)
             {
-  
+                printf("%d\n", event->bossType);
                 switch (event->bossType)
                 {
-                case BOSS_TYPE_JUNKO:
-                    prepareJunkoBoss(window);
+                case BOSS_TYPE_EIKI:
+                    prepareEikiBoss(window);
                     break;
-                case BOSS_TYPE_REMILIA:
-                    prepareRemiliaBoss(window);
+                case BOSS_TYPE_UTSUHO:
+                    prepareUtsuhoBoss(window);
                     break;
-                case BOSS_TYPE_REMILIAV2:
-                    prepareFlandreBoss(window);
+                case BOSS_TYPE_EIKIV2:
+                    prepareEikiv2Boss(window);
                     break;
-                case BOSS_TYPE_JUNKOV2:
-                    prepareYukariBoss(window);
+                case BOSS_TYPE_UTSUHOV2:
+                    prepareUtsuhov2Boss(window);
                     break;
                 }
                 manager->spawnedCount++;
@@ -233,7 +233,7 @@ void startWave(WaveManager* manager, int waveNumber)
         addMinionSpawn(manager, MINION_TYPE_FAST, 0.0f, 3, (sfVector2f) { -100, 200 }, 1.0f);
         addWaitEvent(manager, 4.0f);
 
-        addBossSpawn(manager, BOSS_TYPE_JUNKO, 2.0f, (sfVector2f) { 960, -200 });
+        addBossSpawn(manager, BOSS_TYPE_EIKI, 2.0f, (sfVector2f) { 960, -200 });
         addCompleteEvent(manager);
      
         break;
@@ -252,7 +252,7 @@ void startWave(WaveManager* manager, int waveNumber)
         addMinionSpawn(manager, MINION_TYPE_FAST, 0.0f, 3, (sfVector2f) { 960, -100 }, 0.8f);
         addWaitEvent(manager, 4.0f);
 
-        addBossSpawn(manager, BOSS_TYPE_REMILIA, 3.0f, (sfVector2f) { 960, -200 });
+        addBossSpawn(manager, BOSS_TYPE_UTSUHO, 3.0f, (sfVector2f) { 960, -200 });
         addCompleteEvent(manager);
         break;
     }
@@ -270,7 +270,7 @@ void startWave(WaveManager* manager, int waveNumber)
         addMinionSpawn(manager, MINION_TYPE_TANK, 0.5f, 2, (sfVector2f) { 2020, 300 }, 1.5f);
         addWaitEvent(manager, 5.0f);
 
-        addBossSpawn(manager, BOSS_TYPE_REMILIAV2, 2.0f, (sfVector2f) { 960, -200 });
+        addBossSpawn(manager, BOSS_TYPE_EIKIV2, 2.0f, (sfVector2f) { 960, -200 });
         addCompleteEvent(manager);
         break;
     }
@@ -296,7 +296,7 @@ void startWave(WaveManager* manager, int waveNumber)
         addWaitEvent(manager, 6.0f);
 
 
-        addBossSpawn(manager, BOSS_TYPE_JUNKOV2, 0.0f, (sfVector2f) { 960, -200 });
+        addBossSpawn(manager, BOSS_TYPE_UTSUHOV2, 0.0f, (sfVector2f) { 960, -200 });
    
         addCompleteEvent(manager);
         break;

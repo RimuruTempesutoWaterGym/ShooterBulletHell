@@ -368,15 +368,18 @@ void DisplayParticle(sfRenderWindow* _window, sfCircleShape* _circle)
 				sfCircleShape_setTexture(_circle, GetTexture("spellcardpart"), NULL);
 			else if (tempParticle->type == lifeforcePart)
 				sfCircleShape_setTexture(_circle, GetTexture("heartpart"), NULL);
+
 			else
 				sfCircleShape_setTexture(_circle, GetTexture("particles"), NULL);
-			particlesRect.left = tempParticle->color * particlesRect.width;
+		
 			if (tempParticle->type == pointPart)
 			{
+				lootpartRect.left = tempParticle->color * particlesRect.width/2;
 				sfCircleShape_setTextureRect(_circle, lootpartRect);
 			}
 			else
 			{
+				particlesRect.left = tempParticle->color * particlesRect.width;
 				sfCircleShape_setTextureRect(_circle, particlesRect);
 			}
 			sfCircleShape_setFillColor(_circle, (sfColor) { 255, 255, 255, tempParticle->fadeValue });

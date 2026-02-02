@@ -248,7 +248,7 @@ void MovementPlayer(player* _player)
 	{
 		_player->pos.y -= _player->velocity.y * getDeltaTime();
 	}
-	if (sfKeyboard_isKeyPressed(sfKeyS) && _player->pos.y < 1030)
+	if (sfKeyboard_isKeyPressed(sfKeyS) && _player->pos.y < 930)
 	{
 		_player->pos.y += _player->velocity.y * getDeltaTime();
 	}

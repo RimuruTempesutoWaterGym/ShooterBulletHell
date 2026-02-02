@@ -116,7 +116,10 @@ void stateUpdate(Window* _window)
 				{
 					updateCredits(_window);
 				}
-					updateMenu(_window);
+				else {
+				updateMenu(_window);
+			}
+				
 			}
 			else if (state == GAME)
 			{
@@ -255,9 +258,6 @@ void stateDeinit(Window* _window)
 	{
 		deinitGame();
 		deinitOptions();
-		deinitPause();
-		deinitDefeat();
-		deinitWin();
 	}
 	if (state == END)
 	{

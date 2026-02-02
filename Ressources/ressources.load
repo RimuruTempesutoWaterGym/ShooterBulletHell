@@ -6,7 +6,7 @@ font zelda ../Ressources/Fonts/The_Wild_Breath_of_Zelda.otf
 [menu]
 single menu ../Ressources/Textures/Menu.png
 music menu ../Ressources/Musics/menu.ogg
-font big ../Ressources/Fonts/full_Pack_2025.ttf
+font big ../Ressources/Fonts/OrientalChicken.ttf
 single touhoutmp ../Ressources/Textures/backgrounds/touhoutmp.png
 [end]
 [game]

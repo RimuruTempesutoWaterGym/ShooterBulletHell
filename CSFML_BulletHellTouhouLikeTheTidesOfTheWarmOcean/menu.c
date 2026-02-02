@@ -9,6 +9,7 @@ sfFont* venture3D;
 
 sfText* Play;
 sfText* Credits;
+sfText* Name;
 sfText* Options;
 sfText* Quit;
 sfSprite* spBgMenu;
@@ -32,23 +33,28 @@ void initMenu(Window* _window)
 
 	Play = sfText_create();
 	Credits = sfText_create();
+	Name = sfText_create();
 	Options = sfText_create();
 	Quit = sfText_create();
 	spBgMenu = sfSprite_create();
 	sfText_setFont(Play, venture3D);
 	sfText_setFont(Credits, venture3D);
+	sfText_setFont(Name, venture3D);
 	sfText_setFont(Options, venture3D);
 	sfText_setFont(Quit, venture3D);
-	sfText_setString(Play, "Play");
+	sfText_setString(Play, "Jouer");
 	sfText_setString(Credits, "Credits");
-	sfText_setString(Options, "Settings");
-	sfText_setString(Quit, "Quit");
+	sfText_setString(Name, "Les marees de l'ocean chaud");
+	sfText_setString(Options, "Options");
+	sfText_setString(Quit, "Quitter");
 	sfText_setCharacterSize(Play, 72);
 	sfText_setCharacterSize(Credits, 72);
+	sfText_setCharacterSize(Name, 72);
 	sfText_setCharacterSize(Options, 72);
 	sfText_setCharacterSize(Quit, 72);
 	sfText_setPosition(Play, vector2f(mainView->PosView.x + 100.0f ,mainView->PosView.y - 100.0f));
 	sfText_setPosition(Credits, vector2f(mainView->PosView.x + 200.0f, mainView->PosView.y - 0.0f));
+	sfText_setPosition(Name, vector2f(mainView->PosView.x  - 500, mainView->PosView.y -400 ));
 	sfText_setPosition(Options, vector2f(mainView->PosView.x + 300.0f, mainView->PosView.y + 100.0f));
 	sfText_setPosition(Quit, vector2f(mainView->PosView.x + 200.0f, mainView->PosView.y + 200.0f));
 	sfSprite_setTexture(spBgMenu, GetTexture("touhoutmp"), sfTrue);
@@ -65,31 +71,33 @@ void updateMenu(Window* _window)
 	static float timer = 0.0f;
 	timer += getDeltaTime();
 
+	sfText_setColor(Name, sfBlue);
 	switch (menuSelection)
 	{
 	case 0:
-		sfText_setColor(Play, sfBlue);
+		sfText_setColor(Play, sfRed);
 		sfText_setColor(Credits, sfWhite);
+		
 		sfText_setColor(Options, sfWhite);
 		sfText_setColor(Quit, sfWhite);
 		break;
 	case 1:
 		sfText_setColor(Play, sfWhite);
-		sfText_setColor(Credits, sfBlue);
+		sfText_setColor(Credits, sfRed);
 		sfText_setColor(Options, sfWhite);
 		sfText_setColor(Quit, sfWhite);
 		break;
 	case 2:
 		sfText_setColor(Play, sfWhite);
 		sfText_setColor(Credits, sfWhite);
-		sfText_setColor(Options, sfBlue);
+		sfText_setColor(Options, sfRed);
 		sfText_setColor(Quit, sfWhite);
 		break;
 	case 3:
 		sfText_setColor(Play, sfWhite);
 		sfText_setColor(Credits, sfWhite);
 		sfText_setColor(Options, sfWhite);
-		sfText_setColor(Quit, sfBlue);
+		sfText_setColor(Quit, sfRed);
 		break;
 	default:
 		break;
@@ -192,6 +200,7 @@ void displayMenu(Window* _window)
 	sfRenderWindow_drawSprite(_window->renderWindow, spBgMenu, NULL);
 	sfRenderWindow_drawText(_window->renderWindow, Play, NULL);
 	sfRenderWindow_drawText(_window->renderWindow, Credits, NULL);
+	sfRenderWindow_drawText(_window->renderWindow, Name, NULL);
 	sfRenderWindow_drawText(_window->renderWindow, Options, NULL);
 	sfRenderWindow_drawText(_window->renderWindow, Quit, NULL);
 }

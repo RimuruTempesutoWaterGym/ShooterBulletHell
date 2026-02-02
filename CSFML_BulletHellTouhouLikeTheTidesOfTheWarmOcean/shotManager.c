@@ -634,7 +634,7 @@ void createTimeKnives(sfVector2f center, int waveCount)
             tempShot->typeShot = TimeKnifeShot;  // New type
             tempShot->life = 1;
             tempShot->damage = 1;
-            tempShot->scale = 12;
+            tempShot->scale = 19;
             tempShot->hasHit = sfFalse;
             tempShot->hitTimer = 0;
 
@@ -671,7 +671,7 @@ void createDeflationWorld(sfVector2f center, int rings)
             tempShot->typeShot = TimeKnifeShot;
             tempShot->life = 1;
             tempShot->damage = 1;
-            tempShot->scale = 10;
+            tempShot->scale = 15;
             tempShot->hasHit = sfFalse;
             tempShot->hitTimer = 0;
 
@@ -708,7 +708,7 @@ void createPerfectSquare(sfVector2f center)
             tempShot->typeShot = TimeKnifeShot;
             tempShot->life = 1;
             tempShot->damage = 1;
-            tempShot->scale = 8;
+            tempShot->scale = 12;
             tempShot->hasHit = sfFalse;
             tempShot->hitTimer = 0;
 
@@ -753,7 +753,7 @@ void createEternalMeek(sfVector2f center, sfVector2f playerPos)
             tempShot->typeShot = TimeKnifeShot;
             tempShot->life = 1;
             tempShot->damage = 1;
-            tempShot->scale = 10;
+            tempShot->scale = 15;
             tempShot->hasHit = sfFalse;
             tempShot->hitTimer = 0;
 
@@ -803,7 +803,7 @@ void createBackdoorSpiral(sfVector2f center)
                 tempShot->typeShot = BackdoorShot;  // New type
                 tempShot->life = 1;
                 tempShot->damage = 1;
-                tempShot->scale = 10;
+                tempShot->scale = 15;
                 tempShot->hasHit = sfFalse;
                 tempShot->hitTimer = 0;
 
@@ -849,7 +849,7 @@ void createSummerBackdoor(sfVector2f center)
             tempShot->typeShot = BackdoorShot;
             tempShot->life = 1;
             tempShot->damage = 1;
-            tempShot->scale = 12;
+            tempShot->scale = 19;
             tempShot->hasHit = sfFalse;
             tempShot->hitTimer = 0;
 
@@ -893,7 +893,7 @@ void createCrystallizedRelease(sfVector2f center)
             tempShot->typeShot = BackdoorShot;
             tempShot->life = 1;
             tempShot->damage = 1;
-            tempShot->scale = 8;
+            tempShot->scale = 12;
             tempShot->hasHit = sfFalse;
             tempShot->hitTimer = 0;
 
@@ -942,7 +942,7 @@ void createButterflyDream(sfVector2f center, sfVector2f playerPos)
             tempShot->typeShot = BackdoorShot;
             tempShot->life = 1;
             tempShot->damage = 1;
-            tempShot->scale = 10;
+            tempShot->scale = 19;
             tempShot->hasHit = sfFalse;
             tempShot->hitTimer = 0;
 
@@ -1310,11 +1310,13 @@ void DisplayShot(sfRenderWindow* _window, sfCircleShape* _shot)
         {
             sfCircleShape_setTexture(_shot, GetTexture("ennemyShot"), NULL);
             sfCircleShape_setTextureRect(_shot, (sfIntRect) { 0, 0, 16, 16 });
+            sfCircleShape_setFillColor(_shot, (sfColor) { 255, 255, 255, 255 });
         }
         if (tempShot->shooter == ally)
         {
             sfCircleShape_setTexture(_shot, GetTexture("shot"), NULL);
             sfCircleShape_setTextureRect(_shot, (sfIntRect) { 0, 0, 16, 16 });
+            sfCircleShape_setFillColor(_shot, (sfColor) { 255, 255, 255, 255 });
         }
         if (tempShot->typeShot == SpellCardShot)
         {
@@ -1324,11 +1326,11 @@ void DisplayShot(sfRenderWindow* _window, sfCircleShape* _shot)
         }
         else if (tempShot->typeShot == BackdoorShot)
         {
-            printf("dd");
+          
             // Portal bullet - glowing effect
             sfCircleShape_setTexture(_shot, GetTexture("backdoorShot"), NULL);
             backdoorShotFrame = (int){ backdoorShotTimeAnim / GetFrameTime("backdoorShot") } % GetNbFrame("backdoorShot");
-            backdoorShotRect.left = backdoorShotRect.width * backdoorShotFrame;
+            backdoorShotRect.top = backdoorShotRect.height * backdoorShotFrame;
             sfCircleShape_setTextureRect(_shot,backdoorShotRect);
             // Pulse before teleport
             if (!tempShot->hasTeleported &&

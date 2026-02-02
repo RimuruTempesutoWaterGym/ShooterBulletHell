@@ -129,7 +129,7 @@ void updateGame(Window* _window)
 			if (nextWaveDelay >= 3.0f)
 			{
 				waveManager.currentWave++;
-				if (waveManager.currentWave > 2)
+				if (waveManager.currentWave > 4)
 				{
 					player* tempPlayer = GetPlayerList();
 					while (tempPlayer != NULL)

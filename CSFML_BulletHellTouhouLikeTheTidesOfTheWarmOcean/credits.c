@@ -102,8 +102,6 @@ void updateCredits(Window* _window)
     sfText_setPosition(txtReturnBack, vector2f(baseX + cursorOffset, 900));
     sfSprite_setPosition(spCursorCredits, vector2f(baseX, 900));
 
-
-    sfText_setPosition(txtReturnBack, vector2f(baseX, viewCenter.y - 200.0f));
 }
 void displayCredits(Window* _window)
 {
