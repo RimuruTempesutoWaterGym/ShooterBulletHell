@@ -371,7 +371,6 @@ void DisplayParticle(sfRenderWindow* _window, sfCircleShape* _circle)
 
 			else
 				sfCircleShape_setTexture(_circle, GetTexture("particles"), NULL);
-		
 			if (tempParticle->type == pointPart)
 			{
 				lootpartRect.left = tempParticle->color * particlesRect.width/2;
