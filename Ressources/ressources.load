@@ -5,22 +5,42 @@ font zelda ../Ressources/Fonts/The_Wild_Breath_of_Zelda.otf
 [end]
 [menu]
 single menu ../Ressources/Textures/Menu.png
-music touhou ../Ressources/Musics/touhou.ogg
+music menu ../Ressources/Musics/menu.ogg
 font big ../Ressources/Fonts/full_Pack_2025.ttf
+single touhoutmp ../Ressources/Textures/backgrounds/touhoutmp.png
 [end]
 [game]
+music stage1 ../Ressources/Musics/stage1.ogg
+music stage2 ../Ressources/Musics/stage2.ogg
+music stage3 ../Ressources/Musics/stage3.ogg
+music stage4  ../Ressources/Musics/stage4.ogg
 animation patchuliAnim ../Ressources/Textures/patchuli.anim
-single enemy ../Ressources/Textures/enemyGreen1.png
+animation bdShotAnim ../Ressources/Textures/backdoorShot.anim
 single eiki ../Ressources/Textures/eikiShiki.png
+soundfx laser ../Ressources/SoundsFX/laser.ogg
+soundfx hit ../Ressources/SoundsFX/MASTERSPARK.ogg
+soundfx spellCard ../Ressources/SoundsFX/SPELLCARD.ogg
+soundfx defeated ../Ressources/SoundsFX/DEFEATED.ogg
+soundfx powerUp ../Ressources/SoundsFX/powerupSfx.ogg
+soundfx death ../Ressources/SoundsFX/TouhouDeath.ogg
+single patchulichibi ../Ressources/Textures/Danmaku/PatchouliKn.png
 single utsuho ../Ressources/Textures/utsuho.png
+single cirno ../Ressources/Textures/Danmaku/Cirno.png
+single suikalbuki ../Ressources/Textures/Danmaku/SuikaIbuki.png
+single clownpiece ../Ressources/Textures/Danmaku/Clownpiece.png
+single flandreScarlet ../Ressources/Textures/Danmaku/FlandreScarlet.png
+single life ../Ressources/Textures/Danmaku/life.png
+single spellcard ../Ressources/Textures/Danmaku/spellcard.png
 single bg ../Ressources/Textures/backgrounds/SeaWavesBN.png
-single enemy2 ../Ressources/Textures/enemyRed3.png
-single boss ../Ressources/Textures/ufoRed.png
+single hud ../Ressources/Textures/backgrounds/hud.png
 single shot ../Ressources/Textures/Danmaku/shot.png
 single ennemyShot ../Ressources/Textures/Danmaku/ennemyShot.png
+ingle iceShard ../Ressources/Textures/Danmaku/iceShard.png
 single hitbox ../Ressources/Textures/Danmaku/hitbox.png
 spritesheet particlesSheet ../Ressources/Textures/particles.spritesheet
 spritesheet speelCardSheet ../Ressources/Textures/spellcards.spritesheet
+spritesheet spellcardpart ../Ressources/Textures/spellcardspart.spritesheet
+spritesheet lifeforcepart ../Ressources/Textures/heartspart.spritesheet
+spritesheet lootpart ../Ressources/Textures/lootspart.spritesheet
 animation explosionAnim ../Ressources/Textures/explosion.anim
-music touhou ../Ressources/Musics/touhou.ogg
 [end]

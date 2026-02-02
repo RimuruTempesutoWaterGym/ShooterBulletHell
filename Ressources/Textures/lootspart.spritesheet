@@ -1,0 +1,7 @@
+[path]
+../Ressources/Textures/Danmaku/lootspart.png
+[end]
+// Sprite Name | left | top | width | height
+[config]
+lootpart	0	0	16	16
+[end]

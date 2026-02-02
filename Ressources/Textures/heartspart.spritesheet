@@ -1,0 +1,7 @@
+[path]
+../Ressources/Textures/Danmaku/heartspart.png
+[end]
+// Sprite Name | left | top | width | height
+[config]
+heartpart	0	0	32	32
+[end]
